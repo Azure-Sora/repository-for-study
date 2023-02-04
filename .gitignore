@@ -54,3 +54,6 @@ hs_err_pid*
 *.exe
 *.out
 *.app
+*.pdb
+*.pdb
+*.json
