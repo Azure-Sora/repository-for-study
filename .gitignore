@@ -57,3 +57,11 @@ hs_err_pid*
 *.pdb
 *.pdb
 *.json
+*.tlog
+
+#IDE
+/.idea
+/.vscode
+/.vs
+Debug/
+x64/
