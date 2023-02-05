@@ -77,3 +77,5 @@ x64/
 *.ipch
 *.pdb
 Project1/.vs/C/v17/Browse.VC.db
+Project1/.vs/C/v17/.suo
+*.db
