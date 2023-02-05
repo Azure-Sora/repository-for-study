@@ -69,3 +69,10 @@ Project1/Project1/将“China”译成密码
 /.vs
 Debug/
 x64/
+*.ilk
+*.vsidx
+*.db-shm
+*.opendb
+*.db-wal
+*.ipch
+*.pdb
