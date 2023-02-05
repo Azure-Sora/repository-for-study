@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class ConvertToRomanNumerals {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        String input = null;
+        String input;
         while (true) {
             boolean whetherInputInvalid = false;
             input = sc.next();
@@ -35,6 +35,4 @@ public class ConvertToRomanNumerals {
 
         return sb.toString();
     }
-
-
 }
