@@ -1,23 +1,21 @@
 package start;
 
-import java.util.Random;
 import java.util.Scanner;
+import java.util.StringJoiner;
 
 public class LearningCodes {
     public static void main(String[] args) {
-        Scanner scan = new Scanner(System.in);
-        Random random = new Random();
-        int[] awards = {2, 588, 888, 1000, 10000};
-        int temp;
-        for (int i = 0; i < awards.length; i++) {
-            int index = random.nextInt(5);
-                temp = awards[i];
-                awards[i] = awards[index];
-                awards[index] = temp;
-
+        Scanner sc = new Scanner(System.in);
+        StringJoiner sj = new StringJoiner(", ");
+        int num = -1;
+        while(num != 0){
+            sj.add(toLetters(sc.nextInt()));
         }
-        for (int i = 0; i < awards.length; i++) {
-            System.out.println(awards[i] + "元的奖金被抽出");
-        }
+        String result = sj.toString();
+        System.out.println(result);
+    }
+    public static String toLetters(int num){
+        String[] source = {"I","II","III","IV","V"};
+        return source[num-1];
     }
 }
