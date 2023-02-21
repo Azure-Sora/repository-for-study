@@ -93,6 +93,22 @@ int ReadDataFromFile(char* fname, checkinData data[])
 	/*
 	your code here
 	*/
+	for (int i = 0; i < iCount; i++)
+	{
+		unsigned char tmpChksum = data[i].chksum;
+		data[i].chksum = 0;
+		unsigned char* ptr = &data[i];
+		int size = sizeof(ptr);
+		unsigned char newChksum = getChksum(ptr, size);
+		if (tmpChksum == newChksum)
+		{
+			continue;
+		}
+		else
+		{
+			printf("校验码错误！");
+		}
+	}
 
 	printf("从文件%s读到 %d 条记录\n\n", fname, iCount);
 
@@ -124,6 +140,13 @@ int WriteDataFromFile(char* fname, checkinData data[], int nCount)
 	/*
 	your code here
 	*/
+	for (int i = 0; i < nCount; i++)
+	{
+		data[i].chksum = 0;
+		unsigned char* ptr = &data[i];
+		int size = sizeof(ptr);
+		data[i].chksum = getChksum(ptr, size);
+	}
 
 
 
@@ -253,12 +276,15 @@ void displayARecord(checkinData* p)
 	char subject[20];		//考试科目
 	unsigned char chksum;	//第三题使用
 	*/
+	struct tm* ptr;
 	char checkinTime[50];
-	strftime(checkinTime, 50, "%x %X", &(p->checkinTime));
-	char checkoutTime[50];
+	ptr = localtime(&p->checkinTime);
+	strftime(checkinTime, 50, "%x %X", ptr);
+	char checkoutTime[50] = { '0' };
 	if (p->checkoutTime != 0)
 	{
-		strftime(checkoutTime, 50, "%x %X", &(p->checkoutTime));
+		ptr = localtime(&p->checkoutTime);
+		strftime(checkoutTime, 50, "%x %X", ptr);
 	}
 	printf("\n学号:%d\n姓名:%s\n签到时间:%s\n签退时间:%s\n考试科目:%s\n", p->studentNo, p->nameStr, checkinTime, checkoutTime, p->subject);
 }
