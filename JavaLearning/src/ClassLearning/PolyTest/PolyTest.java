@@ -5,5 +5,8 @@ public class PolyTest {
         Person a = new Student();
         //a.studentMethod();
         a.personMethod();
+        if (a instanceof Student b) {
+            b.studentMethod();
+        }
     }
 }
