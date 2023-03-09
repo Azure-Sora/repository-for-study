@@ -8,14 +8,19 @@ public class LearningCodes {
         Scanner sc = new Scanner(System.in);
         StringJoiner sj = new StringJoiner(", ");
         int num = -1;
-        while(num != 0){
-            sj.add(toLetters(sc.nextInt()));
+        while (true) {
+            num = sc.nextInt();
+            if (num == 0) {
+                break;
+            }
+            sj.add(toLetters(num));
         }
         String result = sj.toString();
         System.out.println(result);
     }
-    public static String toLetters(int num){
-        String[] source = {"I","II","III","IV","V"};
-        return source[num-1];
+
+    public static String toLetters(int num) {
+        String[] source = {"I", "II", "III", "IV", "V"};
+        return source[num - 1];
     }
 }
