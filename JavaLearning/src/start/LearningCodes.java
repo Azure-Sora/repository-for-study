@@ -6,21 +6,18 @@ import java.util.StringJoiner;
 public class LearningCodes {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        StringJoiner sj = new StringJoiner(", ");
-        int num = -1;
-        while (true) {
-            num = sc.nextInt();
-            if (num == 0) {
-                break;
-            }
-            sj.add(toLetters(num));
+        try {
+//            System.out.println(divide(sc.nextInt(), sc.nextInt()));
+            System.out.println(sc.nextInt() / sc.nextInt());
+        } catch (Exception e) {
+            System.out.println(e.toString());
         }
-        String result = sj.toString();
-        System.out.println(result);
     }
 
-    public static String toLetters(int num) {
-        String[] source = {"I", "II", "III", "IV", "V"};
-        return source[num - 1];
+    public static int divide(int a, int b) {
+        if (b == 0) {
+            throw new ArithmeticException();
+        }
+        return a / b;
     }
 }
