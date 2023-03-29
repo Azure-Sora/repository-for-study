@@ -1,9 +1,9 @@
 package GameUI;
 
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -33,6 +33,7 @@ public class GameFrame extends JFrame {
             this.index = index;
             this.setIcon(new ImageIcon("src/resources/buttonPictures/normal.png"));
             this.addMouseListener(this);
+            this.setBorder(new BevelBorder(BevelBorder.RAISED));
 
             GameFrame.this.add(this);
         }
@@ -81,6 +82,7 @@ public class GameFrame extends JFrame {
         public nextPicture() {
             //创建下一张图片
             this.setBounds(700, 250, 200, 200);
+            this.setBorder(new BevelBorder(BevelBorder.RAISED));
         }
 
         private void showUI() {
@@ -119,14 +121,41 @@ public class GameFrame extends JFrame {
 
     private void intiMenuBar() {
         JMenuBar jmb = new JMenuBar();
+
         //游戏菜单
         JMenu gameOperateMenu = new JMenu("游戏");
         JMenuItem exitGameItem = new JMenuItem("退出游戏");
+        exitGameItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
         gameOperateMenu.add(exitGameItem);
         jmb.add(gameOperateMenu);
+
         //关于菜单
         JMenu aboutMenu = new JMenu("关于");
+        JMenuItem aboutMe = new JMenuItem("关于");
+        aboutMenu.add(aboutMe);
+        aboutMe.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JLabel aboutMe = new JLabel();
+                aboutMe.setBounds(0, 0, 642, 642);
+                aboutMe.setIcon(new ImageIcon("src/resources/mika.png"));
+                JDialog dialog = new JDialog();
+                dialog.setSize(670, 700);
+                dialog.setAlwaysOnTop(true);
+                dialog.setLocationRelativeTo(null);
+                dialog.add(aboutMe);
+                dialog.setModal(true);
+                dialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+                dialog.setVisible(true);
+            }
+        });
         jmb.add(aboutMenu);
+
 
         this.setJMenuBar(jmb);
     }

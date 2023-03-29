@@ -1,10 +1,13 @@
 package start;
 
-public class HelloWorld{
+import java.util.StringTokenizer;
+
+public class HelloWorld {
     public static void main(String[] args) {
-        int[] arr = {1,2,3,4,4};
-        for(int a : arr){
-            System.out.println(a);
+        for (int i = 0; i < 4; i++) {
+            for (int i1 = 1; i1 < 3; i1++) {
+                System.out.println(1);
+            }
         }
     }
 }
