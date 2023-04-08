@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="1.c">
+    <ClCompile Include="FindTheNumber.c">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
