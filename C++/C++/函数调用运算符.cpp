@@ -8,6 +8,7 @@ public:
 		cout << src;
 	}
 };
+
 int main()
 {
 	Print()("1!5!");
