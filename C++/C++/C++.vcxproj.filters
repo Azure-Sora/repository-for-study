@@ -13,10 +13,28 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="源文件\运算符重载">
+      <UniqueIdentifier>{0f1d0f76-90fd-4a44-be36-bb5f85ad43e6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="源.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="加运算符.cpp">
+      <Filter>源文件\运算符重载</Filter>
+    </ClCompile>
+    <ClCompile Include="左移.cpp">
+      <Filter>源文件\运算符重载</Filter>
+    </ClCompile>
+    <ClCompile Include="递增.cpp">
+      <Filter>源文件\运算符重载</Filter>
+    </ClCompile>
+    <ClCompile Include="赋值.cpp">
+      <Filter>源文件\运算符重载</Filter>
+    </ClCompile>
+    <ClCompile Include="关系.cpp">
+      <Filter>源文件\运算符重载</Filter>
+    </ClCompile>
+    <ClCompile Include="函数调用运算符.cpp">
+      <Filter>源文件\运算符重载</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
