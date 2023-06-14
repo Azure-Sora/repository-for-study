@@ -25,9 +25,10 @@ public class IOTest {
             s = extendArray(s, 1);
             s[s.length - 1] = st.nextToken();
         }
-        for(String ele : s){
+        for (String ele : s) {
             System.out.println(ele);
         }
+        /*System.out.println(add(10,5));*/
 
     }
 
@@ -36,4 +37,8 @@ public class IOTest {
         System.arraycopy(src, 0, newS, 0, src.length);
         return newS;
     }
+
+    /*public static <T extends Number> T add(T num1, T num2) {
+
+    }*/
 }
