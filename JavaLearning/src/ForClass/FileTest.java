@@ -32,6 +32,10 @@ public class FileTest {
             System.out.println(e);
         }
         try {
+            /*Scanner sc = new Scanner(new FileReader(file));
+            while (sc.hasNext()) {
+                System.out.println(sc.nextLine());
+            }*/
             BufferedReader br = new BufferedReader(new FileReader(file));
             while (br.ready()) {
                 System.out.println(br.readLine());
