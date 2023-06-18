@@ -3,7 +3,7 @@ package ForClass;
 import java.io.*;
 
 public class FileTest {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception{
         PrintWriter stdout = new PrintWriter(System.out);
         BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));
         File file = new File("fileTest.txt");
