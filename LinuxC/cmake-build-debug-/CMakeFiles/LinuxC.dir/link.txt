@@ -1,0 +1,1 @@
+/usr/bin/cc -g CMakeFiles/LinuxC.dir/main.c.o CMakeFiles/LinuxC.dir/pthread.c.o -o LinuxC  -lpthread 

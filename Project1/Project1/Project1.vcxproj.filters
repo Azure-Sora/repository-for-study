@@ -18,5 +18,8 @@
     <ClCompile Include="高斯消元法.c">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="flappybird.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
