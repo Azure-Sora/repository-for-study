@@ -6,8 +6,14 @@
 
 pthread_mutex_t mutex;
 
+typedef struct {
+    int a;
+    const char *b;
+} id;
+
 void *print(void *arg) {
 
+    id *this = (id *) arg;
     pthread_mutex_lock(&mutex);
 
     printf("hello");
@@ -15,17 +21,23 @@ void *print(void *arg) {
     printf("world");
     sleep(1);
 
+    printf("a=%d , b=%s", this->a, this->b);
+
     pthread_mutex_unlock(&mutex);
 
     pthread_exit(NULL);
 }
 
-int main() {
+int main0() {
 
     pthread_t pthread;
     pthread_mutex_init(&mutex, NULL);
 
-    pthread_create(&pthread, NULL, print, NULL);
+    id *myid = malloc(sizeof(id));
+    myid->a = 5;
+    myid->b = "abc";
+
+    pthread_create(&pthread, NULL, print, myid);
 
     pthread_mutex_lock(&mutex);
 

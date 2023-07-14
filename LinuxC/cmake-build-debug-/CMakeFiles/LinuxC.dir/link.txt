@@ -1,1 +1,1 @@
-/usr/bin/cc -g CMakeFiles/LinuxC.dir/main.c.o CMakeFiles/LinuxC.dir/pthread.c.o -o LinuxC  -lpthread 
+/usr/bin/cc -g CMakeFiles/LinuxC.dir/main.c.o CMakeFiles/LinuxC.dir/pthread.c.o CMakeFiles/LinuxC.dir/fork.c.o CMakeFiles/LinuxC.dir/atom.c.o CMakeFiles/LinuxC.dir/threadsSort.c.o -o LinuxC  -lpthread 

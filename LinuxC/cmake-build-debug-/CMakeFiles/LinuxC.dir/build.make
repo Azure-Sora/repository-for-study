@@ -97,19 +97,67 @@ CMakeFiles/LinuxC.dir/pthread.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/LinuxC.dir/pthread.c.s"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /tmp/tmp.dnulYsBFg7/pthread.c -o CMakeFiles/LinuxC.dir/pthread.c.s
 
+CMakeFiles/LinuxC.dir/fork.c.o: CMakeFiles/LinuxC.dir/flags.make
+CMakeFiles/LinuxC.dir/fork.c.o: /tmp/tmp.dnulYsBFg7/fork.c
+CMakeFiles/LinuxC.dir/fork.c.o: CMakeFiles/LinuxC.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/tmp/tmp.dnulYsBFg7/cmake-build-debug-/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/LinuxC.dir/fork.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/LinuxC.dir/fork.c.o -MF CMakeFiles/LinuxC.dir/fork.c.o.d -o CMakeFiles/LinuxC.dir/fork.c.o -c /tmp/tmp.dnulYsBFg7/fork.c
+
+CMakeFiles/LinuxC.dir/fork.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/LinuxC.dir/fork.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /tmp/tmp.dnulYsBFg7/fork.c > CMakeFiles/LinuxC.dir/fork.c.i
+
+CMakeFiles/LinuxC.dir/fork.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/LinuxC.dir/fork.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /tmp/tmp.dnulYsBFg7/fork.c -o CMakeFiles/LinuxC.dir/fork.c.s
+
+CMakeFiles/LinuxC.dir/atom.c.o: CMakeFiles/LinuxC.dir/flags.make
+CMakeFiles/LinuxC.dir/atom.c.o: /tmp/tmp.dnulYsBFg7/atom.c
+CMakeFiles/LinuxC.dir/atom.c.o: CMakeFiles/LinuxC.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/tmp/tmp.dnulYsBFg7/cmake-build-debug-/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/LinuxC.dir/atom.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/LinuxC.dir/atom.c.o -MF CMakeFiles/LinuxC.dir/atom.c.o.d -o CMakeFiles/LinuxC.dir/atom.c.o -c /tmp/tmp.dnulYsBFg7/atom.c
+
+CMakeFiles/LinuxC.dir/atom.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/LinuxC.dir/atom.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /tmp/tmp.dnulYsBFg7/atom.c > CMakeFiles/LinuxC.dir/atom.c.i
+
+CMakeFiles/LinuxC.dir/atom.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/LinuxC.dir/atom.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /tmp/tmp.dnulYsBFg7/atom.c -o CMakeFiles/LinuxC.dir/atom.c.s
+
+CMakeFiles/LinuxC.dir/threadsSort.c.o: CMakeFiles/LinuxC.dir/flags.make
+CMakeFiles/LinuxC.dir/threadsSort.c.o: /tmp/tmp.dnulYsBFg7/threadsSort.c
+CMakeFiles/LinuxC.dir/threadsSort.c.o: CMakeFiles/LinuxC.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/tmp/tmp.dnulYsBFg7/cmake-build-debug-/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object CMakeFiles/LinuxC.dir/threadsSort.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/LinuxC.dir/threadsSort.c.o -MF CMakeFiles/LinuxC.dir/threadsSort.c.o.d -o CMakeFiles/LinuxC.dir/threadsSort.c.o -c /tmp/tmp.dnulYsBFg7/threadsSort.c
+
+CMakeFiles/LinuxC.dir/threadsSort.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/LinuxC.dir/threadsSort.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /tmp/tmp.dnulYsBFg7/threadsSort.c > CMakeFiles/LinuxC.dir/threadsSort.c.i
+
+CMakeFiles/LinuxC.dir/threadsSort.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/LinuxC.dir/threadsSort.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /tmp/tmp.dnulYsBFg7/threadsSort.c -o CMakeFiles/LinuxC.dir/threadsSort.c.s
+
 # Object files for target LinuxC
 LinuxC_OBJECTS = \
 "CMakeFiles/LinuxC.dir/main.c.o" \
-"CMakeFiles/LinuxC.dir/pthread.c.o"
+"CMakeFiles/LinuxC.dir/pthread.c.o" \
+"CMakeFiles/LinuxC.dir/fork.c.o" \
+"CMakeFiles/LinuxC.dir/atom.c.o" \
+"CMakeFiles/LinuxC.dir/threadsSort.c.o"
 
 # External object files for target LinuxC
 LinuxC_EXTERNAL_OBJECTS =
 
 LinuxC: CMakeFiles/LinuxC.dir/main.c.o
 LinuxC: CMakeFiles/LinuxC.dir/pthread.c.o
+LinuxC: CMakeFiles/LinuxC.dir/fork.c.o
+LinuxC: CMakeFiles/LinuxC.dir/atom.c.o
+LinuxC: CMakeFiles/LinuxC.dir/threadsSort.c.o
 LinuxC: CMakeFiles/LinuxC.dir/build.make
 LinuxC: CMakeFiles/LinuxC.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/tmp/tmp.dnulYsBFg7/cmake-build-debug-/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking C executable LinuxC"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/tmp/tmp.dnulYsBFg7/cmake-build-debug-/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking C executable LinuxC"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/LinuxC.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

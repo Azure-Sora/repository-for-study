@@ -129,6 +129,54 @@ LinuxC/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/LinuxC.dir/build.make CMakeFiles/LinuxC.dir/build
 .PHONY : LinuxC/fast
 
+atom.o: atom.c.o
+.PHONY : atom.o
+
+# target to build an object file
+atom.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/LinuxC.dir/build.make CMakeFiles/LinuxC.dir/atom.c.o
+.PHONY : atom.c.o
+
+atom.i: atom.c.i
+.PHONY : atom.i
+
+# target to preprocess a source file
+atom.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/LinuxC.dir/build.make CMakeFiles/LinuxC.dir/atom.c.i
+.PHONY : atom.c.i
+
+atom.s: atom.c.s
+.PHONY : atom.s
+
+# target to generate assembly for a file
+atom.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/LinuxC.dir/build.make CMakeFiles/LinuxC.dir/atom.c.s
+.PHONY : atom.c.s
+
+fork.o: fork.c.o
+.PHONY : fork.o
+
+# target to build an object file
+fork.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/LinuxC.dir/build.make CMakeFiles/LinuxC.dir/fork.c.o
+.PHONY : fork.c.o
+
+fork.i: fork.c.i
+.PHONY : fork.i
+
+# target to preprocess a source file
+fork.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/LinuxC.dir/build.make CMakeFiles/LinuxC.dir/fork.c.i
+.PHONY : fork.c.i
+
+fork.s: fork.c.s
+.PHONY : fork.s
+
+# target to generate assembly for a file
+fork.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/LinuxC.dir/build.make CMakeFiles/LinuxC.dir/fork.c.s
+.PHONY : fork.c.s
+
 main.o: main.c.o
 .PHONY : main.o
 
@@ -177,6 +225,30 @@ pthread.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/LinuxC.dir/build.make CMakeFiles/LinuxC.dir/pthread.c.s
 .PHONY : pthread.c.s
 
+threadsSort.o: threadsSort.c.o
+.PHONY : threadsSort.o
+
+# target to build an object file
+threadsSort.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/LinuxC.dir/build.make CMakeFiles/LinuxC.dir/threadsSort.c.o
+.PHONY : threadsSort.c.o
+
+threadsSort.i: threadsSort.c.i
+.PHONY : threadsSort.i
+
+# target to preprocess a source file
+threadsSort.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/LinuxC.dir/build.make CMakeFiles/LinuxC.dir/threadsSort.c.i
+.PHONY : threadsSort.c.i
+
+threadsSort.s: threadsSort.c.s
+.PHONY : threadsSort.s
+
+# target to generate assembly for a file
+threadsSort.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/LinuxC.dir/build.make CMakeFiles/LinuxC.dir/threadsSort.c.s
+.PHONY : threadsSort.c.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -186,12 +258,21 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... LinuxC"
+	@echo "... atom.o"
+	@echo "... atom.i"
+	@echo "... atom.s"
+	@echo "... fork.o"
+	@echo "... fork.i"
+	@echo "... fork.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
 	@echo "... pthread.o"
 	@echo "... pthread.i"
 	@echo "... pthread.s"
+	@echo "... threadsSort.o"
+	@echo "... threadsSort.i"
+	@echo "... threadsSort.s"
 .PHONY : help
 
 
