@@ -6,9 +6,9 @@ template <class E> class List
 {
 public:
 
-	List()
+	List()//使用构造函数进行初始化
 	{
-		head = new ListNode<E>;
+		head = new ListNode<E>;//头结点
 		tail = head;
 		current = head;
 		length = 0;
