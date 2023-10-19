@@ -30,6 +30,11 @@ void List<E>::removeAll()//清空之后再次初始化
 template<class E>
 void List<E>::print()
 {
+	if (length == 0)
+	{
+		std::cerr << "链表为空!" << endl;
+		return;
+	}
 	ListNode<E>* temp = current;//记录当前操作位置，方便还原
 	current = head->next;
 	while (current != nullptr)
@@ -71,38 +76,73 @@ template<class E>
 E& List<E>::getValue()
 {
 	if (current != nullptr) return current->value;
+	//这里有bug，current == nullptr的时候会出问题，但找不到办法返回一个空引用，
+	//尝试用下面的方法解决，但改了一下之后一堆报错
 }
+
+//template<class E>
+//std::optional<std::reference_wrapper<E>> List<E>::getValue()
+//{
+//	if (current != nullptr) return { current->value };
+//	else std::nullopt;
+//}
+
+
 
 template<class E>
 List<E>* List<E>::insert(const E& value)
 {
-	ListNode<E>* newNode = new ListNode<E>(value, current->next);//在操作位置后方插入新结点
-	current->next = newNode;
-	if (current == tail) tail = newNode;//更新尾结点
-	length++;
+	try
+	{
+		ListNode<E>* newNode = new ListNode<E>(value, current->next);//在操作位置后方插入新结点
+		current->next = newNode;
+		if (current == tail) tail = newNode;//更新尾结点
+		length++;
+	}
+	catch (...)
+	{
+		std::cerr << "插入失败" << endl;
+	}
+	
 	return this;
 }
 
 template<class E>
 List<E>* List<E>::append(const E& value)//在尾部追加新结点
 {
-	ListNode<E>* newNode = new ListNode<E>(value);
-	tail->next = newNode;
-	tail = newNode;
-	length++;
+	try
+	{
+		ListNode<E>* newNode = new ListNode<E>(value);
+		tail->next = newNode;
+		tail = newNode;
+		length++;
+	}
+	catch (...)
+	{
+		std::cerr << "追加失败" << endl;
+	}
+	
 	return this;
 }
 
 template<class E>
 List<E>* List<E>::remove()
 {
-	perv();//移动到前一位置
-	if (current->next == tail) tail = current;//更新尾结点
-	ListNode<E>* newNext = current->next->next;//提前准备连接删除位置的前后
-	delete current->next;
-	current->next = newNext;
-	current = current->next;//回到原操作位置
-	length--;
+	try
+	{
+		perv();//移动到前一位置
+		if (current->next == tail) tail = current;//更新尾结点
+		ListNode<E>* newNext = current->next->next;//提前准备连接删除位置的前后
+		delete current->next;
+		current->next = newNext;
+		current = current->next;//回到原操作位置
+		length--;
+	}
+	catch (...)
+	{
+		std::cerr << "删除失败" << endl;
+	}
+	
 	return this;
 }
 
@@ -155,7 +195,11 @@ int List<E>::search(const E& target)
 template<class E>
 List<E>* List<E>::moveToPos(int pos)//一个一个往后数
 {
-	if (pos > length) return this;
+	if (pos > length)
+	{
+		std::cerr << "越界" << endl;
+		return this;
+	}
 	current = head;
 	for (int i = pos; i > 0; i--)
 	{
@@ -200,6 +244,11 @@ void List<E>::loadFormFile(std::string fileName)
 	{
 		E val;
 		file >> val;
+		if (file.fail())
+		{
+			std::cerr << "读取异常!" << endl;
+			break;
+		}
 		append(val);//把读入的string放进输入流，自动转换为E类型
 	}
 	file.close();
