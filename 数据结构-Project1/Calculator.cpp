@@ -20,9 +20,13 @@ string Calculator::toPostfixExpression(string src)
 	{
 		src.replace(src.find("tan"), 3, "T");
 	}
+	while (src.find("lg") != string::npos)//预处理输入，把常用对数转为易处理的单个符号
+	{
+		src.replace(src.find("lg"), 2, "G");
+	}
 	bool isFrontNumber = false;//标记上一个是数还是运算符，用于处理多位数和小数
 	bool isFrontOperator = true;
-	for (auto s : src)//遍历输入
+	for (auto &s : src)//遍历输入
 	{
 		if ((s >= '0' && s <= '9') || (s == '.'))//数字直接拼接
 		{
@@ -38,12 +42,12 @@ string Calculator::toPostfixExpression(string src)
 				output = output + " ";
 				isFrontNumber = false;
 			}
-			isFrontOperator = true;
 			if (isFrontOperator && s == '-')//处理负数
 			{
 				output = output + "-";
 				continue;
 			}
+			isFrontOperator = true;
 
 			if (s == '(')//左括号直接入栈
 			{
@@ -88,72 +92,93 @@ string Calculator::toPostfixExpression(string src)
 	return output;
 }
 
-double Calculator::CalculatePostfix(string str) {
+double Calculator::CalculatePostfix(string str) 
+{
 	Stack<double> stack;
-	string NumOrOperator = "0123456789+-*/^SCT";
+	string NumOrOperator = "0123456789+-*/^SCTG";//定义数字和运算符号，方便之后查找
 	int start, end;
 	double Num, FirstNum, SecondNum;
-	const double Pi = acos(-1.0);
-	for (int i = 0; i < str.length();) {
-		start = str.find_first_of(NumOrOperator,i);
-		end = str.find_first_of(" ", i);
-		string tempstr = str.substr(start, end - start);
-		if(tempstr == "+" || tempstr == "-" || tempstr == "*" || tempstr == "/" || tempstr == "^"){
-			
+	const double Pi = acos(-1.0);//定义圆周率派
+	for (int i = 0; i < str.length();) 
+	{
+		start = str.find_first_of(NumOrOperator,i);//找到第一个操作数或者运算符
+		end = str.find_first_of(" ", i);//找到第一个空格
+		if (end == -1) 
+		{
+			end = str.length();
+		}
+		string tempstr = str.substr(start, end - start);//截取操作数或者运算符
+		if(tempstr == "+" || tempstr == "-" || tempstr == "*" || tempstr == "/" || tempstr == "^")//处理加减乘除幂
+		{
 			SecondNum = stack.topValue();
 			stack.pop();
 			FirstNum = stack.topValue();
-			stack.pop();
-			if(tempstr == "+"){
+			stack.pop();//拿出前两个需要操作的数
+			if(tempstr == "+")
+			{
 				Num = FirstNum + SecondNum;
 				stack.push(Num);
 			}
-			if (tempstr == "-") {
+			if (tempstr == "-") 
+			{
 				Num = FirstNum - SecondNum;
 				stack.push(Num);
 			}
-			if (tempstr == "*") {
+			if (tempstr == "*") 
+			{
 				Num = FirstNum * SecondNum;
 				stack.push(Num);
 			}
-			if (tempstr == "/") {
+			if (tempstr == "/") 
+			{
 				Num = FirstNum / SecondNum;
 				stack.push(Num);
 			}
-			if (tempstr == "^") {
-				Num = 1;
-				for(int i = 0;i < SecondNum;i++){
-					Num = Num * FirstNum;
-				}
-				//Num = pow(FirstNum, SecondNum);
+			if (tempstr == "^") 
+			{
+				Num = pow(FirstNum, SecondNum);
 				stack.push(Num);
 			}
-		}else if(tempstr == "S" || tempstr == "C" || tempstr == "T"){
+		}
+		else if (tempstr == "S" || tempstr == "C" || tempstr == "T")//处理三角函数
+		{
 			FirstNum = stack.topValue();
 			stack.pop();
-			FirstNum = FirstNum * Pi / 180;
-			if(tempstr == "S"){
+			FirstNum = FirstNum * Pi / 180;//把角度转换为弧度
+			if (tempstr == "S") 
+			{
 				Num = sin(FirstNum);
 				stack.push(Num);
 			}
-			if(tempstr == "C"){
+			if (tempstr == "C") 
+			{
 				Num = cos(FirstNum);
 				stack.push(Num);
 			}
-			if (tempstr == "T") {
+			if (tempstr == "T") 
+			{
 				Num = tan(FirstNum);
 				stack.push(Num);
 			}
-		}else{
-			stack.push(stod(tempstr));
 		}
-		i = end + 1;
+		else if(tempstr == "G")//处理对数函数，默认以10为底
+		{
+			FirstNum = stack.topValue();
+			stack.pop();
+			Num = log10(FirstNum);
+			stack.push(Num);
+		}
+		else
+		{
+			stack.push(stod(tempstr));//读到的为数，则转换为double并且入栈
+		}
+		i = end + 1;//控制下标移动
 	}
 
 	return stack.topValue();
 }
 
-int Calculator::getOperatorPriority(char op)
+int Calculator::getOperatorPriority(char op)//定义操作符优先级
 {
 	if (op == '(')
 	{
@@ -171,7 +196,7 @@ int Calculator::getOperatorPriority(char op)
 	{
 		return 3;
 	}
-	else if (op == 'S' || op == 'C' || op == 'T')
+	else if (op == 'S' || op == 'C' || op == 'T' || op == 'G')
 	{
 		return 4;
 	}
@@ -184,7 +209,10 @@ void Calculator::test()
 
 void operator>>(istream& in, Calculator& cacu)
 {
-	string a;
-	in >> a;
-	cout << a;
+	string input;
+	in >> input;
+	if (input == "exit") exit(0);
+	input = cacu.toPostfixExpression(input);
+	cout << endl << "后缀表达式为：" << input << endl;
+	cout << "结果为：" << cacu.CalculatePostfix(input);
 }

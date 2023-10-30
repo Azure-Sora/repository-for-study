@@ -130,7 +130,7 @@
     <ClCompile Include="Calculator.cpp" />
     <ClCompile Include="Stack.cpp" />
     <ClCompile Include="StackElement.cpp" />
-    <ClCompile Include="Test.cpp" />
+    <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Calculator.h" />
