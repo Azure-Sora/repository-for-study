@@ -1,5 +1,5 @@
 #include<iostream>
-#include"Stack.cpp"
+#include"Stack.h"
 #include"Calculator.h"
 using namespace std;
 
@@ -18,7 +18,12 @@ int main()
 	cout << stack->topValue() << endl;*/
 
 	Calculator a;
-	cin >> a;
+	string str;
+	cin >> str;
+	string out = a.toPostfixExpression(str);
+	cout << out << endl;
+	/*double temp = a.CalculatePostfix(out);
+	cout << temp;*/
 
 	return 0;
 }

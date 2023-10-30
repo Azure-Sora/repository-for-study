@@ -11,6 +11,7 @@ public:
 
 	void clear();
 	int getLength();
+	bool empty();
 	E& topValue();
 	Stack<E>* push(const E& value);
 	Stack<E>* pop();

@@ -19,6 +19,12 @@ int Stack<E>::getLength()
 }
 
 template<class E>
+bool Stack<E>::empty()
+{
+	return length > 0 ? false : true;
+}
+
+template<class E>
 E& Stack<E>::topValue()
 {
 	return top->value;
