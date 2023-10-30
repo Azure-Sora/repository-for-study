@@ -22,8 +22,8 @@ int main()
 	cin >> str;
 	string out = a.toPostfixExpression(str);
 	cout << out << endl;
-	/*double temp = a.CalculatePostfix(out);
-	cout << temp;*/
+	double temp = a.CalculatePostfix(out);
+	cout << temp;
 
 	return 0;
 }
