@@ -85,6 +85,7 @@ string Calculator::toPostfixExpression(string src)
 		if (isFrontNumber)
 		{
 			output = output + " ";
+			isFrontNumber = false;
 		}
 		output = output + stack.topValue() + " ";
 		stack.pop();
@@ -95,7 +96,7 @@ string Calculator::toPostfixExpression(string src)
 double Calculator::CalculatePostfix(string str) 
 {
 	Stack<double> stack;
-	string NumOrOperator = "0123456789+-*/^SCTG";//定义数字和运算符号，方便之后查找
+	string NumOrOperator = "0123456789+-*/^SCTG!";//定义数字和运算符号，方便之后查找
 	int start, end;
 	double Num, FirstNum, SecondNum;
 	const double Pi = acos(-1.0);//定义圆周率派
@@ -168,6 +169,13 @@ double Calculator::CalculatePostfix(string str)
 			Num = log10(FirstNum);
 			stack.push(Num);
 		}
+		else if (tempstr == "!")
+		{
+			FirstNum = stack.topValue();
+			stack.pop();
+			Num = tgamma(FirstNum + 1);
+			stack.push(Num);
+		}
 		else
 		{
 			stack.push(stod(tempstr));//读到的为数，则转换为double并且入栈
@@ -192,7 +200,7 @@ int Calculator::getOperatorPriority(char op)//定义操作符优先级
 	{
 		return 2;
 	}
-	else if (op == '^')
+	else if (op == '^' || op == '!')
 	{
 		return 3;
 	}
@@ -202,16 +210,12 @@ int Calculator::getOperatorPriority(char op)//定义操作符优先级
 	}
 }
 
-void Calculator::test()
-{
-	std::cout << "test";
-}
-
 void operator>>(istream& in, Calculator& cacu)
 {
 	string input;
 	in >> input;
 	if (input == "exit") exit(0);
+
 	input = cacu.toPostfixExpression(input);
 	cout << endl << "后缀表达式为：" << input << endl;
 	cout << "结果为：" << cacu.CalculatePostfix(input);

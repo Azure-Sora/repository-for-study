@@ -11,9 +11,7 @@ public:
 	string toPostfixExpression(string src);
 	double CalculatePostfix(string str);
 	int getOperatorPriority(char op);
-
-
-	void test();
+	double calculateInfix(string src);
 
 private:
 	
