@@ -12,6 +12,8 @@ public:
 	double CalculatePostfix(string str);
 	int getOperatorPriority(char op);
 	double calculateInfix(string src);
+	double calculateShortInfix(string src);
+	void judgeOperandAndCalculate(string& multientryOp, Stack<char>& opStack, string& tempExpression, Stack<double>& numStack);
 
 private:
 	

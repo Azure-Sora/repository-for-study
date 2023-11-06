@@ -50,7 +50,10 @@ void showMenu()
 void calculate()
 {
 	Calculator cacu;
-	cin >> cacu;
-	cout << endl;
+	/*cin >> cacu;
+	cout << endl;*/
+	string a;
+	cin >> a;
+	cout << endl << cacu.calculateInfix(a) << endl;
 	system("PAUSE");
 }
