@@ -7,14 +7,16 @@ class Calculator
 {
 public:
 	Calculator() {};
-	friend void operator>>(std::istream& in, Calculator& cacu);
+	int calByPostfix(string src);
+	int calByInfix(string src);
+
+private:
 	string toPostfixExpression(string src);
 	double CalculatePostfix(string str);
 	int getOperatorPriority(char op);
 	double calculateInfix(string src);
 	double calculateShortInfix(string src);
 	void judgeOperandAndCalculate(string& multientryOp, Stack<char>& opStack, string& tempExpression, Stack<double>& numStack);
-
-private:
-	
+	bool isExpressionValid(string src);
+	void simplifyExpression(string& src);
 };

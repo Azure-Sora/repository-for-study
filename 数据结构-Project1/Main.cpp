@@ -8,26 +8,6 @@ void calculate();
 
 int main()
 {
-	/*Stack<int>* stack = new Stack<int>;
-	stack->push(114);
-	stack->push(514);
-
-	cout << "length=" << stack->getLength() << endl;
-	cout << stack->topValue() << endl;
-
-	stack->pop();
-
-	cout << "length=" << stack->getLength() << endl;
-	cout << stack->topValue() << endl;*/
-
-	/*Calculator a;
-	string str;
-	cin >> str;
-	string out = a.toPostfixExpression(str);
-	cout << out << endl;
-	double temp = a.CalculatePostfix(out);
-	cout << temp;*/
-
 	while (1)
 	{
 		showMenu();
@@ -50,10 +30,14 @@ void showMenu()
 void calculate()
 {
 	Calculator cacu;
-	/*cin >> cacu;
-	cout << endl;*/
 	string a;
 	cin >> a;
-	cout << endl << cacu.calculateInfix(a) << endl;
+
+	if (a == "exit") exit(0);
+
+	if (cacu.calByInfix(a) == 0)cacu.calByPostfix(a);
+	
+	
+
 	system("PAUSE");
 }

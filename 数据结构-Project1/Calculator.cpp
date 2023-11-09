@@ -2,28 +2,14 @@
 #include"Stack.cpp"
 #include<string>
 #include<cmath>
+#include<exception>
 using namespace std;
 
 string Calculator::toPostfixExpression(string src)
 {
 	Stack<char> stack;
 	string output;
-	while (src.find("sin") != string::npos)//预处理输入，把三角函数转为易处理的单个符号
-	{
-		src.replace(src.find("sin"), 3, "S");
-	}
-	while (src.find("cos") != string::npos)
-	{
-		src.replace(src.find("cos"), 3, "C");
-	}
-	while (src.find("tan") != string::npos)
-	{
-		src.replace(src.find("tan"), 3, "T");
-	}
-	while (src.find("lg") != string::npos)//预处理输入，把常用对数转为易处理的单个符号
-	{
-		src.replace(src.find("lg"), 2, "G");
-	}
+	simplifyExpression(src);
 	bool isFrontNumber = false;//标记上一个是数还是运算符，用于处理多位数和小数
 	bool isFrontOperator = true;
 	for (auto &s : src)//遍历输入
@@ -100,90 +86,97 @@ double Calculator::CalculatePostfix(string str)
 	int start, end;
 	double Num, FirstNum, SecondNum;
 	const double Pi = acos(-1.0);//定义圆周率派
-	for (int i = 0; i < str.length();) 
+	try
 	{
-		start = str.find_first_of(NumOrOperator,i);//找到第一个操作数或者运算符
-		end = str.find_first_of(" ", i);//找到第一个空格
-		if (end == -1) 
+		for (int i = 0; i < str.length();)
 		{
-			end = str.length();
+			start = str.find_first_of(NumOrOperator, i);//找到第一个操作数或者运算符
+			end = str.find_first_of(" ", i);//找到第一个空格
+			if (end == -1)
+			{
+				end = str.length();
+			}
+			string tempstr = str.substr(start, end - start);//截取操作数或者运算符
+			if (tempstr == "+" || tempstr == "-" || tempstr == "*" || tempstr == "/" || tempstr == "^")//处理加减乘除幂
+			{
+				SecondNum = stack.topValue();
+				stack.pop();
+				FirstNum = stack.topValue();
+				stack.pop();//拿出前两个需要操作的数
+				if (tempstr == "+")
+				{
+					Num = FirstNum + SecondNum;
+					stack.push(Num);
+				}
+				if (tempstr == "-")
+				{
+					Num = FirstNum - SecondNum;
+					stack.push(Num);
+				}
+				if (tempstr == "*")
+				{
+					Num = FirstNum * SecondNum;
+					stack.push(Num);
+				}
+				if (tempstr == "/")
+				{
+					Num = FirstNum / SecondNum;
+					stack.push(Num);
+				}
+				if (tempstr == "^")
+				{
+					Num = pow(FirstNum, SecondNum);
+					stack.push(Num);
+				}
+			}
+			else if (tempstr == "S" || tempstr == "C" || tempstr == "T")//处理三角函数
+			{
+				FirstNum = stack.topValue();
+				stack.pop();
+				FirstNum = FirstNum * Pi / 180;//把角度转换为弧度
+				if (tempstr == "S")
+				{
+					Num = sin(FirstNum);
+					stack.push(Num);
+				}
+				if (tempstr == "C")
+				{
+					Num = cos(FirstNum);
+					stack.push(Num);
+				}
+				if (tempstr == "T")
+				{
+					Num = tan(FirstNum);
+					stack.push(Num);
+				}
+			}
+			else if (tempstr == "G")//处理对数函数，默认以10为底
+			{
+				FirstNum = stack.topValue();
+				stack.pop();
+				Num = log10(FirstNum);
+				stack.push(Num);
+			}
+			else if (tempstr == "!")
+			{
+				FirstNum = stack.topValue();
+				stack.pop();
+				Num = tgamma(FirstNum + 1);
+				stack.push(Num);
+			}
+			else
+			{
+				stack.push(stod(tempstr));//读到的为数，则转换为double并且入栈
+			}
+			i = end + 1;//控制下标移动
 		}
-		string tempstr = str.substr(start, end - start);//截取操作数或者运算符
-		if(tempstr == "+" || tempstr == "-" || tempstr == "*" || tempstr == "/" || tempstr == "^")//处理加减乘除幂
-		{
-			SecondNum = stack.topValue();
-			stack.pop();
-			FirstNum = stack.topValue();
-			stack.pop();//拿出前两个需要操作的数
-			if(tempstr == "+")
-			{
-				Num = FirstNum + SecondNum;
-				stack.push(Num);
-			}
-			if (tempstr == "-") 
-			{
-				Num = FirstNum - SecondNum;
-				stack.push(Num);
-			}
-			if (tempstr == "*") 
-			{
-				Num = FirstNum * SecondNum;
-				stack.push(Num);
-			}
-			if (tempstr == "/") 
-			{
-				Num = FirstNum / SecondNum;
-				stack.push(Num);
-			}
-			if (tempstr == "^") 
-			{
-				Num = pow(FirstNum, SecondNum);
-				stack.push(Num);
-			}
-		}
-		else if (tempstr == "S" || tempstr == "C" || tempstr == "T")//处理三角函数
-		{
-			FirstNum = stack.topValue();
-			stack.pop();
-			FirstNum = FirstNum * Pi / 180;//把角度转换为弧度
-			if (tempstr == "S") 
-			{
-				Num = sin(FirstNum);
-				stack.push(Num);
-			}
-			if (tempstr == "C") 
-			{
-				Num = cos(FirstNum);
-				stack.push(Num);
-			}
-			if (tempstr == "T") 
-			{
-				Num = tan(FirstNum);
-				stack.push(Num);
-			}
-		}
-		else if(tempstr == "G")//处理对数函数，默认以10为底
-		{
-			FirstNum = stack.topValue();
-			stack.pop();
-			Num = log10(FirstNum);
-			stack.push(Num);
-		}
-		else if (tempstr == "!")
-		{
-			FirstNum = stack.topValue();
-			stack.pop();
-			Num = tgamma(FirstNum + 1);
-			stack.push(Num);
-		}
-		else
-		{
-			stack.push(stod(tempstr));//读到的为数，则转换为double并且入栈
-		}
-		i = end + 1;//控制下标移动
-	}
 
-	return stack.topValue();
+		return stack.topValue();
+	}
+	catch (exception& e)
+	{
+		throw e;
+	}
 }
 
 int Calculator::getOperatorPriority(char op)//定义操作符优先级
@@ -217,88 +210,79 @@ double Calculator::calculateInfix(string src)
 	double output;
 	string multientryOp = "+-*/^";
 	string unimal = "!SCTG";
-
-	while (src.find("sin") != string::npos)//预处理输入，把三角函数转为易处理的单个符号
+	try
 	{
-		src.replace(src.find("sin"), 3, "S");
-	}
-	while (src.find("cos") != string::npos)
-	{
-		src.replace(src.find("cos"), 3, "C");
-	}
-	while (src.find("tan") != string::npos)
-	{
-		src.replace(src.find("tan"), 3, "T");
-	}
-	while (src.find("lg") != string::npos)//预处理输入，把常用对数转为易处理的单个符号
-	{
-		src.replace(src.find("lg"), 2, "G");
-	}
-	bool isFrontNumber = false;//标记上一个是数还是运算符，用于处理多位数和小数
-	bool isFrontOperator = true;
-	string tempNum = "";
-	string tempExpression;
-	for (auto& s : src)//遍历输入
-	{
-		if ((s >= '0' && s <= '9') || (s == '.'))//数字拼接
+		simplifyExpression(src);
+		bool isFrontNumber = false;//标记上一个是数还是运算符，用于处理多位数和小数
+		bool isFrontOperator = true;
+		string tempNum = "";
+		string tempExpression;
+		for (auto& s : src)//遍历输入
 		{
-			tempNum = tempNum + s;
-			isFrontNumber = true;
-			isFrontOperator = false;
-			continue;
-		}
-		else
-		{
-			if (isFrontNumber)//如果正在处理运算符且上一个为数字，数字入栈
+			if ((s >= '0' && s <= '9') || (s == '.'))//数字拼接
 			{
-				numStack.push(stod(tempNum));
-				tempNum = "";
-				isFrontNumber = false;
-			}
-			if (isFrontOperator && s == '-')//处理负数
-			{
-				tempNum = tempNum + "-";
+				tempNum = tempNum + s;
+				isFrontNumber = true;
+				isFrontOperator = false;
 				continue;
-			}
-			isFrontOperator = true;
-
-			if (s == '(')//左括号直接入栈
-			{
-				opStack.push('(');
-			}
-			else if (s == ')')//右括号直接出栈，直到遇到左括号
-			{
-				while (opStack.topValue() != '(')
-				{
-					judgeOperandAndCalculate(multientryOp, opStack, tempExpression, numStack);
-				}
-				opStack.pop();
 			}
 			else
 			{
-				if (opStack.empty())
+				if (isFrontNumber)//如果正在处理运算符且上一个为数字，数字入栈
 				{
-					opStack.push(s);
+					numStack.push(stod(tempNum));
+					tempNum = "";
+					isFrontNumber = false;
 				}
-				else
+				if (isFrontOperator && s == '-')//处理负数
 				{
-					while (!opStack.empty() && getOperatorPriority(opStack.topValue()) >= getOperatorPriority(s))//将运算优先级更大的符号全部出栈，然后自己入栈
+					tempNum = tempNum + "-";
+					continue;
+				}
+				isFrontOperator = true;
+
+				if (s == '(')//左括号直接入栈
+				{
+					opStack.push('(');
+				}
+				else if (s == ')')//右括号直接出栈，直到遇到左括号
+				{
+					while (opStack.topValue() != '(')
 					{
 						judgeOperandAndCalculate(multientryOp, opStack, tempExpression, numStack);
 					}
-					opStack.push(s);
+					opStack.pop();
+				}
+				else
+				{
+					if (opStack.empty())
+					{
+						opStack.push(s);
+					}
+					else
+					{
+						while (!opStack.empty() && getOperatorPriority(opStack.topValue()) >= getOperatorPriority(s))//将运算优先级更大的符号全部出栈，然后自己入栈
+						{
+							judgeOperandAndCalculate(multientryOp, opStack, tempExpression, numStack);
+						}
+						opStack.push(s);
+					}
 				}
 			}
 		}
+		if (tempNum != "") numStack.push(stod(tempNum));
+		while (!opStack.empty())//清空栈里剩余的运算符
+		{
+			judgeOperandAndCalculate(multientryOp, opStack, tempExpression, numStack);
+		}
+
+
+		return numStack.topValue();
 	}
-	numStack.push(stod(tempNum));
-	while (!opStack.empty())//清空栈里剩余的运算符
+	catch (exception& e)
 	{
-		judgeOperandAndCalculate(multientryOp, opStack, tempExpression, numStack);
+		throw e;
 	}
-
-
-	return numStack.topValue();
 }
 
 double Calculator::calculateShortInfix(string src)
@@ -379,13 +363,95 @@ void Calculator::judgeOperandAndCalculate(string& multientryOp, Stack<char>& opS
 	}
 }
 
-void operator>>(istream& in, Calculator& cacu)
+bool Calculator::isExpressionValid(string src)
 {
-	string input;
-	in >> input;
-	if (input == "exit") exit(0);
+	simplifyExpression(src);
+	string validChar = "0123456789.+/*-SCTG()!^";
 
-	input = cacu.toPostfixExpression(input);
-	cout << endl << "后缀表达式为：" << input << endl;
-	cout << "结果为：" << cacu.CalculatePostfix(input);
+	for(auto ch : src)
+	{
+		if (validChar.find(ch) == string::npos) 
+		{
+			cout << "表达式含有非法字符";
+			return false;
+		}
+	}
+	return true;
+}
+
+void Calculator::simplifyExpression(string& src)
+{
+	while (src.find("sin") != string::npos)//预处理输入，把三角函数转为易处理的单个符号
+	{
+		src.replace(src.find("sin"), 3, "S");
+	}
+	while (src.find("cos") != string::npos)
+	{
+		src.replace(src.find("cos"), 3, "C");
+	}
+	while (src.find("tan") != string::npos)
+	{
+		src.replace(src.find("tan"), 3, "T");
+	}
+	while (src.find("lg") != string::npos)//预处理输入，把常用对数转为易处理的单个符号
+	{
+		src.replace(src.find("lg"), 2, "G");
+	}
+}
+
+int Calculator::calByPostfix(string src)
+{
+	if (isExpressionValid(src))
+	{
+		src = toPostfixExpression(src);
+		cout << "后缀表达式为：" << src << endl;
+		try
+		{
+			cout << "后缀表达式计算结果为：" << CalculatePostfix(src) << endl;
+			return 0;
+		}
+		catch (const std::exception& e)
+		{
+			string info = e.what();
+			if (info == "invalid stod argument")
+			{
+				cout << "表达式不正确！" << endl;
+			}
+			else if (info == "invalid string position")
+			{
+				cout << "括号不匹配！" << endl;
+			}
+			return -1;
+		}
+		
+	}
+}
+
+int Calculator::calByInfix(string src)
+{
+	if (isExpressionValid(src))
+	{
+		try
+		{
+			cout << "中缀表达式计算结果为：" << calculateInfix(src) << endl;
+			return 0;
+		}
+		catch (const std::exception& e)
+		{
+			//cout << e.what() << endl;
+
+			string info = e.what();
+			if (info == "invalid stod argument")
+			{
+				cout << "表达式不正确！" << endl;
+			}
+			else if (info == "invalid string position")
+			{
+				cout << "括号不匹配！" << endl;
+			}
+
+			return -1;
+		}
+
+	}
 }
