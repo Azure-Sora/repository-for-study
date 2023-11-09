@@ -372,7 +372,7 @@ bool Calculator::isExpressionValid(string src)
 	{
 		if (validChar.find(ch) == string::npos) 
 		{
-			cout << "表达式含有非法字符";
+			cout << "表达式含有非法字符" << endl;
 			return false;
 		}
 	}
