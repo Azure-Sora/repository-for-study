@@ -128,8 +128,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Calculator.cpp" />
-    <ClCompile Include="Stack.cpp" />
-    <ClCompile Include="StackElement.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -18,12 +18,6 @@
     <ClCompile Include="Main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Stack.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="StackElement.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="Calculator.cpp">
       <Filter>源文件</Filter>
     </ClCompile>

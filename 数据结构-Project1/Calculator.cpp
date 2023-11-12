@@ -1,5 +1,5 @@
 #include "Calculator.h"
-#include"Stack.cpp"
+#include"Stack.h"
 #include<string>
 #include<cmath>
 #include<exception>
@@ -249,7 +249,14 @@ double Calculator::calculateInfix(string src)
 				{
 					while (opStack.topValue() != '(')
 					{
-						judgeOperandAndCalculate(multientryOp, opStack, tempExpression, numStack);
+						try
+						{
+							judgeOperandAndCalculate(multientryOp, opStack, tempExpression, numStack);
+						}
+						catch (exception& e)
+						{
+							throw e;
+						}
 					}
 					opStack.pop();
 				}
@@ -263,7 +270,14 @@ double Calculator::calculateInfix(string src)
 					{
 						while (!opStack.empty() && getOperatorPriority(opStack.topValue()) >= getOperatorPriority(s))//将运算优先级更大的符号全部出栈，然后自己入栈
 						{
-							judgeOperandAndCalculate(multientryOp, opStack, tempExpression, numStack);
+							try
+							{
+								judgeOperandAndCalculate(multientryOp, opStack, tempExpression, numStack);
+							}
+							catch (exception& e)
+							{
+								throw e;
+							}
 						}
 						opStack.push(s);
 					}
@@ -273,11 +287,26 @@ double Calculator::calculateInfix(string src)
 		if (tempNum != "") numStack.push(stod(tempNum));
 		while (!opStack.empty())//清空栈里剩余的运算符
 		{
-			judgeOperandAndCalculate(multientryOp, opStack, tempExpression, numStack);
+			try
+			{
+				judgeOperandAndCalculate(multientryOp, opStack, tempExpression, numStack);
+			}
+			catch (exception& e)
+			{
+				throw e;
+			}
 		}
 
-
-		return numStack.topValue();
+		if (numStack.getLength() == 1)
+		{
+			return numStack.topValue();
+		}
+		else
+		{
+			cout << "表达式不正确！" << endl;
+			throw *(new exception("exception"));
+			
+		}
 	}
 	catch (exception& e)
 	{
@@ -336,37 +365,55 @@ double Calculator::calculateShortInfix(string src)
 	return Num;
 }
 
-void Calculator::judgeOperandAndCalculate(string& multientryOp, Stack<char>& opStack, string& tempExpression, Stack<double>& numStack)
+void Calculator::judgeOperandAndCalculate(string& multientryOp, Stack<char>& opStack, string& tempExpression, Stack<double>& numStack)//判断运算符是单目还是双目的，以此取出相应数量操作数进行计算
 {
-	if (multientryOp.find(opStack.topValue()) != string::npos)
+	try
 	{
-		for (int i = 0; i < 2; i++)
+		if (multientryOp.find(opStack.topValue()) != string::npos)
 		{
+			for (int i = 0; i < 2; i++)
+			{
+				if (numStack.getLength() == 0)//如果操作数不够了，证明表达式有问题
+				{
+					cout << "表达式不正确！" << endl;
+					throw* (new exception("exception"));
+					return;
+				}
+				tempExpression = tempExpression + to_string(numStack.topValue()) + " ";
+				numStack.pop();
+			}
+			tempExpression = tempExpression + opStack.topValue();
+			opStack.pop();
+			numStack.push(calculateShortInfix(tempExpression));//把小表达式交给计算函数进行运算
+			tempExpression = "";
+		}
+		else
+		{
+			if (numStack.getLength() == 0)
+			{
+				cout << "表达式不正确！" << endl;
+				throw* (new exception("exception"));
+				return;
+			}
 			tempExpression = tempExpression + to_string(numStack.topValue()) + " ";
 			numStack.pop();
+			tempExpression = tempExpression + opStack.topValue();
+			opStack.pop();
+			numStack.push(calculateShortInfix(tempExpression));
+			tempExpression = "";
 		}
-		tempExpression = tempExpression + opStack.topValue();
-		opStack.pop();
-		//cout << tempExpression << endl;
-		numStack.push(calculateShortInfix(tempExpression));
-		tempExpression = "";
 	}
-	else
+	catch (exception& e)
 	{
-		tempExpression = tempExpression + to_string(numStack.topValue()) + " ";
-		numStack.pop();
-		tempExpression = tempExpression + opStack.topValue();
-		opStack.pop();
-		//cout << tempExpression << endl;
-		numStack.push(calculateShortInfix(tempExpression));
-		tempExpression = "";
+		throw e;
 	}
 }
 
-bool Calculator::isExpressionValid(string src)
+bool Calculator::isExpressionValid(string src)//简单判断表达式有没有易看出的错误
 {
 	simplifyExpression(src);
 	string validChar = "0123456789.+/*-SCTG()!^";
+	string multientryOp = "+-*/^";
 
 	for(auto ch : src)
 	{
@@ -376,6 +423,12 @@ bool Calculator::isExpressionValid(string src)
 			return false;
 		}
 	}
+	if (multientryOp.find(src[src.length() - 1]) != string::npos)
+	{
+		cout << "缺少右操作数" << endl;
+		return false;
+	}
+
 	return true;
 }
 
@@ -399,7 +452,7 @@ void Calculator::simplifyExpression(string& src)
 	}
 }
 
-int Calculator::calByPostfix(string src)
+int Calculator::calByPostfix(string src)//用来调起计算的函数
 {
 	if (isExpressionValid(src))
 	{
@@ -438,8 +491,6 @@ int Calculator::calByInfix(string src)
 		}
 		catch (const std::exception& e)
 		{
-			//cout << e.what() << endl;
-
 			string info = e.what();
 			if (info == "invalid stod argument")
 			{
