@@ -1,13 +1,24 @@
 #include "Heap.h"
+#include<utility>
 
 Heap* Heap::add(HuffmanTree* newTree)
 {
-	if (length == volume) expand();
+	if (length >= volume) expand();
 	heap[length] = newTree;
 	length++;
 	sortHeap();
 	return this;
 }
+
+void Heap::init(std::pair<HuffmanTree**, int> initData)
+{
+	delete heap;
+	heap = initData.first;
+	length = initData.second;
+	volume = initData.second;
+	sortHeap();
+}
+
 
 void Heap::expand()
 {

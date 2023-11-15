@@ -15,4 +15,5 @@ void HuffmanTree::buildTree(Heap& heap)
 		heap.add(newTree);
 	}
 	this->root = heap.heap[0]->root;
+	this->countOfLeaves = heap.length;
 }

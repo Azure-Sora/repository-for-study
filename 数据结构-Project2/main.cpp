@@ -1,9 +1,21 @@
 #include<iostream>
 #include"Heap.h"
+#include"Coder.h"
 using namespace std;
 int main()
 {
-	Node* node1 = new Node(10, "a");
+	Coder cd;
+	/*string a = cd.readUncodedFile("ASC.txt");
+	Heap heap;
+	heap.init(cd.createNodes(a));
+	HuffmanTree* tree = new HuffmanTree();
+	tree->buildTree(heap);
+	Code** codes = cd.createHuffmanCode(tree);*/
+	cd.encodeFile("ASC.txt");
+
+	cout << "" << endl;
+
+	/*Node* node1 = new Node(10, "a");
 	Node* node2 = new Node(20, "b");
 	Node* node3 = new Node(15, "c");
 	Node* node4 = new Node(30, "d");
@@ -13,13 +25,11 @@ int main()
 
 	Heap heap;
 	heap.add(new HuffmanTree(node1))->add(new HuffmanTree(node2))->add(new HuffmanTree(node3))->add(new HuffmanTree(node4))->add(new HuffmanTree(node5))->add(new HuffmanTree(node6))->add(new HuffmanTree(node7));
-	//heap.buildTree();
 	HuffmanTree* tree = new HuffmanTree();
 	tree->buildTree(heap);
 
-	//cout << heap.heap[0]->root->value << heap.heap[1]->root->value << heap.heap[2]->root->value << heap.heap[3]->root->value << heap.heap[4]->root->value;
 	cout << "a";
-	cout << "a";
+	cout << "a";*/
 
 	return 0;
 }

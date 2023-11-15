@@ -127,12 +127,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Code.cpp" />
+    <ClCompile Include="Coder.cpp" />
     <ClCompile Include="Heap.cpp" />
     <ClCompile Include="HuffmanTree.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Node.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Code.h" />
+    <ClInclude Include="Coder.h" />
     <ClInclude Include="Heap.h" />
     <ClInclude Include="HuffmanTree.h" />
     <ClInclude Include="Node.h" />

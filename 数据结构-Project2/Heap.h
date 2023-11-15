@@ -15,6 +15,7 @@ public:
 	}
 
 	Heap* add(HuffmanTree* newTree);
+	void init(std::pair<HuffmanTree**, int> initData);
 	void sortHeap();
 	void expand();
 	void remove(int pos);
