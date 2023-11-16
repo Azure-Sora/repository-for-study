@@ -1,10 +1,8 @@
 #pragma once
 #include<iostream>
 #include<utility>
-#include"Code.h"
 class HuffmanTree;
 class Node;
-class Code;
 
 class Coder
 {
@@ -16,6 +14,8 @@ public:
 	void getCode(Node* node);
 	std::string encodeToBinaryString(std::string text, Node** nodes);
 	std::string decodeBinaryString(std::string bs, Node** nodes);
+	void saveCodedFile(std::string bs, Node** nodes, std::string fileName);
+	void decodeFile(std::string fileDic);
 		
 };
 

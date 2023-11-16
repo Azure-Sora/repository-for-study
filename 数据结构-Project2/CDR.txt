@@ -3,8 +3,11 @@
 #include"HuffmanTree.h"
 #include<fstream>
 #include<sstream>
+#include<mutex>
 #include<windows.h>
 using namespace std;
+
+mutex mtx;
 
 std::string Coder::readUncodedFile(std::string fileDic)
 {
@@ -221,7 +224,7 @@ void Coder::saveCodedFile(std::string bs, Node** nodes, std::string fileName)
     {
         if (i + 8 < bs.length())
         {
-            unsigned char sbs = 0;
+            unsigned char sbs;
             for (int j = 0; j < 8; j++)
             {
                 if (bs[i + j] == '1') sbs += pow(2, 7 - j);
@@ -232,7 +235,7 @@ void Coder::saveCodedFile(std::string bs, Node** nodes, std::string fileName)
         }
         else
         {
-            unsigned char sbs = 0;
+            unsigned char sbs;
             for (int j = 0; j < lastCh; j++)
             {
                 if (bs[i + j] == '1') sbs += pow(2, 7 - j);
@@ -247,72 +250,4 @@ void Coder::saveCodedFile(std::string bs, Node** nodes, std::string fileName)
 
     file.close();
     cout << "文件保存成功" << endl;
-}
-
-void Coder::decodeFile(std::string fileDic)
-{
-    struct Code
-    {
-        char value;
-        int priority;
-    };
-    int codeCount = 0;
-    ifstream file;
-    file.open(fileDic, ios::in | ios::binary);
-
-    file.read((char*)(&codeCount), sizeof(int));
-
-    Node** nodes = new Node * [codeCount + 1];
-    for (int i = 0; i < codeCount + 1; i++)
-    {
-        nodes[i] = nullptr;
-    }
-    for (int i = 0; i < codeCount; i++)
-    {
-        Code cd;
-        file.read((char*)(&cd), sizeof(Code));
-        nodes[i] = new Node(cd.priority, cd.value);
-    }
-
-    Heap heap;
-    for (int i = 0; i < codeCount; i++)
-    {
-        heap.add(new HuffmanTree(nodes[i]));
-    }
-
-    HuffmanTree* tree = new HuffmanTree();
-    tree->buildTree(heap);
-    this->createHuffmanCode(tree);
-
-    int lastCh = 0;
-    file.read((char*)(&lastCh), sizeof(int));
-
-    string bs = "";
-    unsigned char uc = 0;
-
-    while (file.read((char*)(&uc), sizeof(unsigned char)))
-    {
-        string shortS = "";
-        for (int i = 0; i < 8; i++)
-        {
-            if (uc % 2 == 1)
-            {
-                shortS += "1";
-            }
-            else
-            {
-                shortS += "0";
-            }
-            uc /= 2;
-        }
-        bs = bs + string(shortS.rbegin(), shortS.rend());
-    }
-
-    bs = bs.substr(0, bs.length() - 8 + lastCh);
-
-    //cout << bs << endl;
-    file.close();
-
-    string text = decodeBinaryString(bs, nodes);
-    cout << text;
 }

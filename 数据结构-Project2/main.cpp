@@ -14,6 +14,8 @@ int main()
 	Code** codes = cd.createHuffmanCode(tree);*/
 	cd.encodeFile("novel.txt");
 
+	cd.decodeFile("novel.txt.huf");
+
 	system("PAUSE");
 
 	/*Node* node1 = new Node(10, "a");
