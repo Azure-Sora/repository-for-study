@@ -19,6 +19,7 @@ public:
 	void sortHeap();
 	void expand();
 	void remove(int pos);
+	char getFirstValuedNode(Node* node);
 
 };
 

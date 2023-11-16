@@ -42,9 +42,6 @@ void Coder::encodeFile(std::string file)
     string bs = encodeToBinaryString(text, nodeArr);
 
     saveCodedFile(bs, nodeArr, file);
-    //cout << bs << endl << endl;
-    //cout << decodeBinaryString(a, nodeArr);
-    //delete[] codes;
 }
 
 std::pair<HuffmanTree**, int> Coder::createNodes(std::string text, Node**& nodeArr)
@@ -246,7 +243,7 @@ void Coder::saveCodedFile(std::string bs, Node** nodes, std::string fileName)
     file.write((char*)outBS, bsLen * sizeof(unsigned char));
 
     file.close();
-    cout << "文件保存成功" << endl;
+    cout << "文件成功编码为" << fileName + ".huf" << endl;
 }
 
 void Coder::decodeFile(std::string fileDic)
@@ -310,9 +307,14 @@ void Coder::decodeFile(std::string fileDic)
 
     bs = bs.substr(0, bs.length() - 8 + lastCh);
 
-    //cout << bs << endl;
     file.close();
 
     string text = decodeBinaryString(bs, nodes);
-    cout << text;
+
+    string newFile = fileDic.substr(0, fileDic.length() - 4);
+    ofstream ofile;
+    ofile.open(newFile, ios::out | ios::app);
+    ofile.write(text.c_str(), text.size());
+    ofile.close();
+    cout << "文件" << fileDic << "解码成功" << endl;
 }

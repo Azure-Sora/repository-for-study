@@ -44,8 +44,15 @@ void Heap::remove(int pos)
 	length--;
 }
 
+char Heap::getFirstValuedNode(Node* node)
+{
+	if (node->value != '\0') return node->value;
+	return getFirstValuedNode(node->left);
+}
+
 void Heap::sortHeap()
 {
+
 	for (int i = 0; i < length; i++)
 	{
 		int smallest = i;
@@ -54,6 +61,13 @@ void Heap::sortHeap()
 			if (heap[j]->weight() < heap[smallest]->weight())
 			{
 				smallest = j;
+			}
+			if (heap[j]->weight() == heap[smallest]->weight())
+			{
+				if (getFirstValuedNode(heap[j]->root) < getFirstValuedNode(heap[smallest]->root))
+				{
+					smallest = j;
+				}
 			}
 		}
 		if (i != smallest)
