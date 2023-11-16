@@ -2,6 +2,7 @@
 #include"Heap.h"
 #include"Coder.h"
 using namespace std;
+class Coder;
 int main()
 {
 	Coder cd;
@@ -11,9 +12,9 @@ int main()
 	HuffmanTree* tree = new HuffmanTree();
 	tree->buildTree(heap);
 	Code** codes = cd.createHuffmanCode(tree);*/
-	cd.encodeFile("ASC.txt");
+	cd.encodeFile("novel.txt");
 
-	cout << "" << endl;
+	system("PAUSE");
 
 	/*Node* node1 = new Node(10, "a");
 	Node* node2 = new Node(20, "b");
@@ -31,5 +32,6 @@ int main()
 	cout << "a";
 	cout << "a";*/
 
+	
 	return 0;
 }

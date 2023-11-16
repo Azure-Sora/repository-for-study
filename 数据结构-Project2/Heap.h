@@ -19,5 +19,6 @@ public:
 	void sortHeap();
 	void expand();
 	void remove(int pos);
+
 };
 

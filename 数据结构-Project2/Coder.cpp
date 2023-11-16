@@ -4,7 +4,11 @@
 #include"HuffmanTree.h"
 #include<fstream>
 #include<sstream>
+#include<mutex>
+#include<windows.h>
 using namespace std;
+
+mutex mtx;
 
 std::string Coder::readUncodedFile(std::string fileDic)
 {
@@ -32,14 +36,20 @@ void Coder::encodeFile(std::string file)
 {
     string text = this->readUncodedFile(file);
     Heap heap;
-    heap.init(this->createNodes(text));
+    Node** nodeArr;
+    heap.init(this->createNodes(text, nodeArr));
+
     HuffmanTree* tree = new HuffmanTree();
     tree->buildTree(heap);
-    Code** codes = this->createHuffmanCode(tree);
-    cout << encodeToBinaryString(text, codes);
+    this->createHuffmanCode(tree);
+
+    string a = encodeToBinaryString(text, nodeArr);
+    cout << a << endl << endl;
+    cout << decodeBinaryString(a, nodeArr);
+    //delete[] codes;
 }
 
-std::pair<HuffmanTree**, int> Coder::createNodes(std::string text)
+std::pair<HuffmanTree**, int> Coder::createNodes(std::string text, Node**& nodeArr)
 {
     Node** nodes;
     int nodesVolume = 0;
@@ -52,6 +62,10 @@ std::pair<HuffmanTree**, int> Coder::createNodes(std::string text)
         for (int i = 0; i < nodesCount; i++)
         {
             nodes[i] = oldnodes[i];
+        }
+        for (int j = nodesCount; j < nodesVolume; j++)
+        {
+            nodes[j] = nullptr;
         }
         //delete oldnodes;
     };
@@ -85,30 +99,26 @@ std::pair<HuffmanTree**, int> Coder::createNodes(std::string text)
         forest[i] = new HuffmanTree(nodes[i]);
     }
 
+    nodeArr = nodes;
     return pair<HuffmanTree**, int>(forest, nodesCount);
 }
 
-Code** Coder::createHuffmanCode(HuffmanTree* root)
+void Coder::createHuffmanCode(HuffmanTree* root)
 {
-    Code** codes = new Code * [root->countOfLeaves];
-    int count = 0;
-    getCode(root->root, codes, count);
-    return codes;
+    
+    getCode(root->root);
+    
 }
 
-void Coder::getCode(Node* node, Code** codes, int& count)
+void Coder::getCode(Node* node)
 {
+    //string out = "";
     if (node->left != nullptr)
     {
         node->left->code = node->code + "0";
         if (node->left->isLeaf == false)
         {
-            getCode(node->left, codes, count);
-        }
-        else
-        {
-            codes[count] = new Code(node->left->value, node->left->code);
-            count++;
+            getCode(node->left);
         }
     }
     if (node->right != nullptr)
@@ -116,31 +126,62 @@ void Coder::getCode(Node* node, Code** codes, int& count)
         node->right->code = node->code + "1";
         if (node->right->isLeaf == false)
         {
-            getCode(node->right, codes, count);
-        }
-        else
-        {
-            codes[count] = new Code(node->right->value, node->right->code);
-            count++;
+            getCode(node->right);
         }
     }
 }
 
-std::string Coder::encodeToBinaryString(std::string text, Code** codes)
+std::string Coder::encodeToBinaryString(std::string text, Node** nodes)
 {
     string bs = "";
     for (int i = 0; i < text.length(); i++)
     {
         char ch = text[i];
-        for (int j = 0; codes[j] != nullptr; j++)
+        //j < codes[0]->arrLength
+        for (int j = 0; nodes[j] != nullptr; j++)
         {
-            if (codes[j]->value == ch)
+            if (nodes[j]->value == ch)
             {
-                bs += codes[j]->code;
+                bs += nodes[j]->code;
                 break;
             }
         }
     }
 
     return bs;
+}
+
+std::string Coder::decodeBinaryString(std::string bs, Node** nodes)
+{
+    string out = "";
+    for (int i = 0; i < bs.length();)
+    {
+        bool find = false;
+        int len = 1;
+        while (!find)
+        {
+            string temps = "";
+            for (int j = 0; j < len; j++)
+            {
+                temps += bs[i + j];
+            }
+            //k < codes[0]->arrLength
+            for (int k = 0; nodes[k] != nullptr; k++)
+            {
+                if (nodes[k]->code == temps)
+                {
+                    out += nodes[k]->value;
+                    find = true;
+                    break;
+                }
+            }
+            
+            if(!find) len++;
+        }
+        find = false;
+        i += len;
+        len = 1;
+    }
+
+    return out;
 }

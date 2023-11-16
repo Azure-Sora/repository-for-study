@@ -22,9 +22,5 @@ public:
 	int weight();
 	void buildTree(Heap& heap);
 
-	~HuffmanTree()
-	{
-
-	};
 };
 

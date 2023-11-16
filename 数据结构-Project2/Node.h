@@ -13,9 +13,6 @@ public:
 	Node(int priority, char value) :priority(priority), isLeaf(true), value(value), left(nullptr), right(nullptr), code("") {};
 	Node(int priority, Node* left, Node* right) :priority(priority), isLeaf(false), value('\0'), left(left), right(right), code("") {};
 
-	~Node()
-	{
-
-	};
+	
 };
 
