@@ -8,7 +8,7 @@ using namespace std;
 
 std::string Coder::readUncodedFile(std::string fileDic)
 {
-    string out;
+    string out = "";
     ifstream file;
     file.open(fileDic, ios::in);
     if (!file.is_open())
@@ -31,6 +31,9 @@ std::string Coder::readUncodedFile(std::string fileDic)
 void Coder::encodeFile(std::string file)
 {
     string text = this->readUncodedFile(file);
+    if (text == "") return;
+
+    cout << "正在编码" << file << "，请稍候……" << endl;
     Heap heap;
     Node** nodeArr;
     heap.init(this->createNodes(text, nodeArr));
@@ -242,8 +245,18 @@ void Coder::saveCodedFile(std::string bs, Node** nodes, std::string fileName)
 
     file.write((char*)outBS, bsLen * sizeof(unsigned char));
 
+    int codedSize = file.tellp() / 1024;
+
     file.close();
+
+    ifstream srcFile;
+    srcFile.open(fileName, ios::in);
+    srcFile.seekg(0, ios::end);
+    int uncodedSize = srcFile.tellg() / 1024;
+    srcFile.close();
+
     cout << "文件成功编码为" << fileName + ".huf" << endl;
+    cout << "源文件大小" << uncodedSize << "KB，编码文件大小：" << codedSize << "KB，压缩率：" << ((double)codedSize / (double)uncodedSize) * 100 << "%" << endl;
 }
 
 void Coder::decodeFile(std::string fileDic)
@@ -256,6 +269,13 @@ void Coder::decodeFile(std::string fileDic)
     int codeCount = 0;
     ifstream file;
     file.open(fileDic, ios::in | ios::binary);
+    if (!file.is_open())
+    {
+        cout << "文件打开失败" << endl;
+        return;
+    }
+
+    cout << "正在解码" << fileDic << "，请稍候……" << endl;
 
     file.read((char*)(&codeCount), sizeof(int));
 
