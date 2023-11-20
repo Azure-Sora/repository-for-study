@@ -6,7 +6,7 @@ class Coder;
 void showMenu();
 void function();
 
-int main()
+int main()//没什么好写的
 {
 	while (true)
 	{
@@ -49,5 +49,6 @@ void function()
 	{
 		cout << "输入不正确！" << endl;
 	}
+	cin.sync();
 	system("PAUSE");
 }

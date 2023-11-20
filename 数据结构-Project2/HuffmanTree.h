@@ -7,7 +7,6 @@ class HuffmanTree
 {
 public:
 	Node* root;
-	int countOfLeaves = 0;
 
 	HuffmanTree(Node* leaf = nullptr)
 	{

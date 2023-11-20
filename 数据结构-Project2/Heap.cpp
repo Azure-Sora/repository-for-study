@@ -1,7 +1,7 @@
 #include "Heap.h"
 #include<utility>
 
-Heap* Heap::add(HuffmanTree* newTree)
+Heap* Heap::add(HuffmanTree* newTree)//往堆里加一棵树，堆不够大就扩大，加入后即进行一次排序
 {
 	if (length >= volume) expand();
 	heap[length] = newTree;
@@ -10,7 +10,7 @@ Heap* Heap::add(HuffmanTree* newTree)
 	return this;
 }
 
-void Heap::init(std::pair<HuffmanTree**, int> initData)
+void Heap::init(std::pair<HuffmanTree**, int> initData)//使用森林和森林中树的数量初始化一个堆
 {
 	delete heap;
 	heap = initData.first;
@@ -20,7 +20,7 @@ void Heap::init(std::pair<HuffmanTree**, int> initData)
 }
 
 
-void Heap::expand()
+void Heap::expand()//把堆容量扩大10
 {
 	volume += 10;
 	HuffmanTree** oldHeap = heap;
@@ -33,7 +33,7 @@ void Heap::expand()
 	
 }
 
-void Heap::remove(int pos)
+void Heap::remove(int pos)//删除pos下标的树，并把后面的前移
 {
 	HuffmanTree* temp = heap[pos];
 	delete temp;
@@ -44,13 +44,13 @@ void Heap::remove(int pos)
 	length--;
 }
 
-char Heap::getFirstValuedNode(Node* node)
+char Heap::getFirstValuedNode(Node* node)//用于辅助排序
 {
 	if (node->value != '\0') return node->value;
 	return getFirstValuedNode(node->left);
 }
 
-void Heap::sortHeap()
+void Heap::sortHeap()//选择排序，如果两树权重相同，找到树最左下角结点里的字符再进行比较，这样保证每次排序都有相同的结果
 {
 
 	for (int i = 0; i < length; i++)
