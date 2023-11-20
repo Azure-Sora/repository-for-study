@@ -25,21 +25,23 @@ void showMenu()
 void function()
 {
 	Coder cd;
-	string choice;
-	cin >> choice;
+	char input[100];
+	cin.getline(input, 100 * sizeof(char));
+	string choice = string(input);
 	if (choice == "1")
 	{
-		string file;
 		cout << "请输入文件名：";
-		cin >> file;
-		cd.encodeFile(file);
+		char file[100];
+		cin.getline(file, 100 * sizeof(char));
+		cd.encodeFile(string(file));
 	}
 	else if (choice == "2")
 	{
-		string file;
 		cout << "请输入文件名：";
-		cin >> file;
-		cd.decodeFile(file);
+		char file[100];
+		cin.sync();
+		cin.getline(file, 100 * sizeof(char));
+		cd.decodeFile(string(file));
 	}
 	else if (choice == "3")
 	{
