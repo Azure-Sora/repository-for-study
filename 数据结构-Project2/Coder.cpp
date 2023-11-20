@@ -194,6 +194,8 @@ void Coder::saveCodedFile(std::string bs, Node** nodes, std::string fileName)
     ofstream file;
     file.open(fileName + ".huf", ios::out | ios::binary | ios::app);
 
+    string fileIdentification = "HUF";
+    file.write(fileIdentification.c_str(), 3 * sizeof(char));
 
     int nodeCount = 0;
     for (int i = 0; nodes[i] != nullptr; i++)
@@ -272,6 +274,20 @@ void Coder::decodeFile(std::string fileDic)
     if (!file.is_open())
     {
         cout << "文件打开失败" << endl;
+        return;
+    }
+
+    string fileIdentification = "";
+    for (int i = 0; i < 3; i++)
+    {
+        char ch;
+        file.read(&ch, sizeof(char));
+        fileIdentification += ch;
+    }
+    if (fileIdentification != "HUF")
+    {
+        cout << "文件并非由该程序编码的文件" << endl;
+        file.close();
         return;
     }
 
