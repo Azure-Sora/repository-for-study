@@ -15,7 +15,7 @@ public:
 	std::string encodeToBinaryString(std::string text, Node** nodes);
 	std::string decodeBinaryString(std::string bs, Node** nodes);
 	void saveCodedFile(std::string bs, Node** nodes, std::string fileName);
-	void decodeFile(std::string fileDic);
+	void decodeFile(std::string filePath);
 		
 };
 

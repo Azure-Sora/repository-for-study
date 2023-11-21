@@ -6,11 +6,11 @@
 #include<windows.h>
 using namespace std;
 
-std::string Coder::readUncodedFile(std::string fileDic)//把源文件的所有内容读进一个string里
+std::string Coder::readUncodedFile(std::string filePath)//把源文件的所有内容读进一个string里
 {
     string out = "";
     ifstream file;
-    file.open(fileDic, ios::in);
+    file.open(filePath, ios::in);
     if (!file.is_open())
     {
         cout << "文件打开失败" << endl;
@@ -210,6 +210,11 @@ void Coder::saveCodedFile(std::string bs, Node** nodes, std::string fileName)
     string fileIdentification = "HUF";//用于标记文件为该程序编码，在解码时验证
     file.write(fileIdentification.c_str(), 3 * sizeof(char));
 
+    char end = '\0';//保存文件名
+    string fileNameWithoutPath = fileName.substr(fileName.find_last_of('\\') + 1);
+    file.write(fileNameWithoutPath.c_str(), fileNameWithoutPath.length() * sizeof(char));
+    file.write(&end, sizeof(char));
+
     int nodeCount = 0;
     for (int i = 0; nodes[i] != nullptr; i++)
     {
@@ -261,24 +266,24 @@ void Coder::saveCodedFile(std::string bs, Node** nodes, std::string fileName)
 
     file.write((char*)outBS, bsLen * sizeof(unsigned char));//写入二进制串
 
-    int codedSize = file.tellp() / 1024;
+    double codedSize = (double)file.tellp() / (double)1024;
 
     file.close();
 
     ifstream srcFile;
     srcFile.open(fileName, ios::in);
     srcFile.seekg(0, ios::end);
-    int uncodedSize = srcFile.tellg() / 1024;
+    double uncodedSize = (double)srcFile.tellg() / (double)1024;
     srcFile.close();
 
     cout << "文件成功编码为" << fileName + ".huf" << endl;
-    cout << "源文件大小" << uncodedSize << "KB，编码文件大小：" << codedSize << "KB，压缩率：" << ((double)codedSize / (double)uncodedSize) * 100 << "%" << endl;
+    cout << "源文件大小" << uncodedSize << "KB，编码文件大小：" << codedSize << "KB，压缩率：" << (codedSize / uncodedSize) * 100 << "%" << endl;
 }
 
 /*
 * 读取并解码文件
 */
-void Coder::decodeFile(std::string fileDic)
+void Coder::decodeFile(std::string filePath)
 {
     struct Code
     {
@@ -287,7 +292,7 @@ void Coder::decodeFile(std::string fileDic)
     };
     int codeCount = 0;
     ifstream file;
-    file.open(fileDic, ios::in | ios::binary);
+    file.open(filePath, ios::in | ios::binary);
     if (!file.is_open())
     {
         cout << "文件打开失败" << endl;
@@ -308,7 +313,19 @@ void Coder::decodeFile(std::string fileDic)
         return;
     }
 
-    cout << "正在解码" << fileDic << "，请稍候……" << endl;
+    cout << "正在解码" << filePath << "，请稍候……" << endl;
+
+    string newFile = "";//读取保存的文件名
+    while (true)
+    {
+        char ch = 0;
+        file.read(&ch, sizeof(char));
+        if (ch == '\0')
+        {
+            break;
+        }
+        newFile += ch;
+    }
 
     file.read((char*)(&codeCount), sizeof(int));
 
@@ -369,10 +386,9 @@ void Coder::decodeFile(std::string fileDic)
 
     string text = decodeBinaryString(bs, nodes);//解码得到文本
 
-    string newFile = fileDic.substr(0, fileDic.length() - 4);
     ofstream ofile;
     ofile.open(newFile, ios::out | ios::app);
     ofile.write(text.c_str(), text.size());
     ofile.close();
-    cout << endl << "文件" << fileDic << "解码成功" << endl;
+    cout << endl << "文件" << filePath << "成功解码为" << newFile << endl;
 }
