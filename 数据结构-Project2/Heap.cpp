@@ -46,7 +46,7 @@ void Heap::remove(int pos)//删除pos下标的树，并把后面的前移
 
 char Heap::getFirstValuedNode(Node* node)//用于辅助排序
 {
-	if (node->value != '\0') return node->value;
+	if (node->isLeaf) return node->value;
 	return getFirstValuedNode(node->left);
 }
 

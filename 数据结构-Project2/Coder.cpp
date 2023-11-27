@@ -10,19 +10,24 @@ std::string Coder::readUncodedFile(std::string filePath)//把源文件的所有内容读进
 {
     string out = "";
     ifstream file;
-    file.open(filePath, ios::in);
+    file.open(filePath, ios::in | ios::binary);
     if (!file.is_open())
     {
         cout << "文件打开失败" << endl;
         return out;
     }
 
-    string temp;
-    getline(file, out);
-    while (getline(file, temp))//读完一行手动添加一个换行符
+    file.seekg(0, ios::end);//计算文件大小，一次性全部读入内存
+    int size = file.tellg();
+    file.seekg(0, ios::beg);
+    unsigned char* chs = new unsigned char[size];
+    file.read((char*)chs, size * sizeof(unsigned char));
+    for (int i = 0; i < size; i++)
     {
-        out = out + '\n' + temp;
+        out += chs[i];
     }
+    delete chs;
+
     file.close();
     return out;
 }
@@ -387,7 +392,7 @@ void Coder::decodeFile(std::string filePath)
     string text = decodeBinaryString(bs, nodes);//解码得到文本
 
     ofstream ofile;
-    ofile.open(newFile, ios::out | ios::app);
+    ofile.open(newFile, ios::out | ios::app | ios::binary);//用二进制读写很关键，否则windows会抽风把\n变成\r\n
     ofile.write(text.c_str(), text.size());
     ofile.close();
     cout << endl << "文件" << filePath << "成功解码为" << newFile << endl;
