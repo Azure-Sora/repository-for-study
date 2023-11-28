@@ -137,6 +137,8 @@
     <ClInclude Include="Coder.h" />
     <ClInclude Include="Heap.h" />
     <ClInclude Include="HuffmanTree.h" />
+    <ClInclude Include="List.h" />
+    <ClInclude Include="ListNode.h" />
     <ClInclude Include="Node.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

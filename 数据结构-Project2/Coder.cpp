@@ -1,6 +1,7 @@
 #include "Coder.h"
 #include"Node.h"
 #include"HuffmanTree.h"
+#include"List.h"
 #include<fstream>
 #include<sstream>
 #include<windows.h>
@@ -166,6 +167,20 @@ std::string Coder::encodeToBinaryString(std::string text, Node** nodes)
 std::string Coder::decodeBinaryString(std::string bs, Node** nodes)
 {
     string out = "";
+
+    //优化解码速度，把相同code长度的字符放在一个链表，按照字符数放在数组里
+    int longestCode = 0;
+    for (int i = 0; nodes[i] != nullptr; i++)
+    {
+        if (nodes[i]->code.length() > longestCode)longestCode = nodes[i]->code.length();
+    }
+    List<Node*>* nodesList = new List<Node*>[longestCode + 1];
+    for (int i = 0; nodes[i] != nullptr; i++)
+    {
+        int codeLen = nodes[i]->code.length();
+        nodesList[codeLen].append(nodes[i]);
+    }
+
     for (int i = 0; i < bs.length();)//先假设编码只有一位，遍历寻找是否有对应的字符，没有则把编码长度加一位，再次寻找字符，直到找到字符，i+=本次编码长度
     {
         bool find = false;
@@ -177,15 +192,19 @@ std::string Coder::decodeBinaryString(std::string bs, Node** nodes)
             {
                 temps += bs[i + j];
             }
-            for (int k = 0; nodes[k] != nullptr; k++)//寻找对应字符
+            
+
+            //寻找对应字符，优化解码速度
+            for (nodesList[len].moveToStart()->next(); nodesList[len].current != nullptr; nodesList[len].next())
             {
-                if (nodes[k]->code == temps)
+                if (nodesList[len].getValue()->code == temps)
                 {
-                    out += nodes[k]->value;
+                    out += nodesList[len].getValue()->value;
                     find = true;
                     break;
                 }
             }
+
             
             if(!find) len++;
         }
