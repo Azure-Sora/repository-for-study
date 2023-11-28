@@ -167,6 +167,7 @@ std::string Coder::encodeToBinaryString(std::string text, Node** nodes)
 std::string Coder::decodeBinaryString(std::string bs, Node** nodes)
 {
     string out = "";
+    out.reserve(bs.length());
 
     //优化解码速度，把相同code长度的字符放在一个链表，按照字符数放在数组里
     int longestCode = 0;
@@ -301,7 +302,7 @@ void Coder::saveCodedFile(std::string bs, Node** nodes, std::string fileName)
     srcFile.close();
 
     cout << "文件成功编码为" << fileName + ".huf" << endl;
-    cout << "源文件大小" << uncodedSize << "KB，编码文件大小：" << codedSize << "KB，压缩率：" << (codedSize / uncodedSize) * 100 << "%" << endl;
+    printf("源文件大小%.1lfKB，编码文件大小：%.1lfKB，压缩率：%.1lf%%\n", uncodedSize, codedSize, (codedSize / uncodedSize) * 100);
 }
 
 /*
@@ -382,6 +383,7 @@ void Coder::decodeFile(std::string filePath)
     file.read((char*)(&lastCh), sizeof(int));
 
     string bs = "";
+    bs.reserve(bsLen);
     unsigned char uc = 0;
 
     while (file.read((char*)(&uc), sizeof(unsigned char)))//一字节一字节地读入
@@ -391,15 +393,15 @@ void Coder::decodeFile(std::string filePath)
         {
             if (uc % 2 == 1)
             {
-                shortS += "1";
+                shortS.append("1");
             }
             else
             {
-                shortS += "0";
+                shortS.append("0");
             }
             uc /= 2;
         }
-        bs = bs + string(shortS.rbegin(), shortS.rend());//翻转倒置的二进制串
+        bs.append(string(shortS.rbegin(), shortS.rend())); //翻转倒置的二进制串，用append速度最快，能比+快10倍以上
         readLen++;
         printf("\r已完成%.1lf%%  ", (double)readLen / (double)bsLen * 66);//这一步差不多占解码过程的2/3时间
     }
