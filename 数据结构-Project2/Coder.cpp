@@ -5,6 +5,7 @@
 #include<fstream>
 #include<sstream>
 #include<windows.h>
+#include<thread>
 using namespace std;
 
 std::string Coder::readUncodedFile(std::string filePath)//把源文件的所有内容读进一个string里
@@ -58,7 +59,7 @@ void Coder::encodeFile(std::string file)//用于编码文件的主函数
 * nodeArr 用于把所有编码结点记录下来方便二进制化的时候用
 * return 由一个一个结点自己作为树的森林和总结点数
 */
-std::pair<HuffmanTree**, int> Coder::createNodes(std::string text, Node**& nodeArr)
+std::pair<HuffmanTree**, int> Coder::createNodes(std::string& text, Node**& nodeArr)
 {
     Node** nodes;
     int nodesVolume = 0;
@@ -142,7 +143,7 @@ void Coder::getCode(Node* node)
 /*
 * 遍历源文本，把每一个字符转换为定好的哈夫曼码，再全部串在一起返回
 */
-std::string Coder::encodeToBinaryString(std::string text, Node** nodes)
+std::string Coder::encodeToBinaryString(std::string& text, Node** nodes)
 {
     string bs = "";
     for (int i = 0; i < text.length(); i++)
@@ -164,7 +165,7 @@ std::string Coder::encodeToBinaryString(std::string text, Node** nodes)
 /*
 * 解码读入的二进制串，返回源文本
 */
-std::string Coder::decodeBinaryString(std::string bs, Node** nodes)
+std::string Coder::decodeBinaryString(std::string& bs, Node** nodes)
 {
     string out = "";
     out.reserve(bs.length());
@@ -182,7 +183,10 @@ std::string Coder::decodeBinaryString(std::string bs, Node** nodes)
         nodesList[codeLen].append(nodes[i]);
     }
 
-    for (int i = 0; i < bs.length();)//先假设编码只有一位，遍历寻找是否有对应的字符，没有则把编码长度加一位，再次寻找字符，直到找到字符，i+=本次编码长度
+    int pos = 0;
+    int bsLen = bs.length();
+    thread progress(&Coder::showProgress, this, ref(pos), ref(bsLen), 50, 50);
+    for (;pos < bs.length();)//先假设编码只有一位，遍历寻找是否有对应的字符，没有则把编码长度加一位，再次寻找字符，直到找到字符，i+=本次编码长度
     {
         bool find = false;
         int len = 1;//假设的编码长度
@@ -191,7 +195,7 @@ std::string Coder::decodeBinaryString(std::string bs, Node** nodes)
             string temps = "";
             for (int j = 0; j < len; j++)//取出本次假设的编码
             {
-                temps += bs[i + j];
+                temps += bs[pos + j];
             }
             
 
@@ -210,18 +214,17 @@ std::string Coder::decodeBinaryString(std::string bs, Node** nodes)
             if(!find) len++;
         }
         find = false;
-        i += len;
+        pos += len;
         len = 1;
-        printf("\r已完成%.1lf%%  ", (double)i / (double)bs.length() * 34 + 66);
     }
-
+    progress.join();
     return out;
 }
 
 /*
 * 把编码好的二进制串加上附加信息后保存在文件中
 */
-void Coder::saveCodedFile(std::string bs, Node** nodes, std::string fileName)
+void Coder::saveCodedFile(std::string& bs, Node** nodes, std::string fileName)
 {
     struct Code //用于记录字符及其权重的结构体
     {
@@ -386,6 +389,7 @@ void Coder::decodeFile(std::string filePath)
     bs.reserve(bsLen);
     unsigned char uc = 0;
 
+    thread progress(&Coder::showProgress, this, ref(readLen), ref(bsLen), 0, 50);
     while (file.read((char*)(&uc), sizeof(unsigned char)))//一字节一字节地读入
     {
         string shortS = "";//除基取余法，得到倒置的二进制串
@@ -401,10 +405,10 @@ void Coder::decodeFile(std::string filePath)
             }
             uc /= 2;
         }
-        bs.append(string(shortS.rbegin(), shortS.rend())); //翻转倒置的二进制串，用append速度最快，能比+快10倍以上
+        bs.append(string(shortS.rbegin(), shortS.rend())); //翻转倒置的二进制串，用append速度最快，能比+快非常多
         readLen++;
-        printf("\r已完成%.1lf%%  ", (double)readLen / (double)bsLen * 66);//这一步差不多占解码过程的2/3时间
     }
+    progress.join();
 
     bs = bs.substr(0, bs.length() - 8 + lastCh);//砍掉二进制串最后不满一字节的多余部分
 
@@ -417,4 +421,18 @@ void Coder::decodeFile(std::string filePath)
     ofile.write(text.c_str(), text.size());
     ofile.close();
     cout << endl << "文件" << filePath << "成功解码为" << newFile << endl;
+}
+
+/*
+* 用多线程来打印进度，避免影响解码性能
+*/
+void Coder::showProgress(const int& done, const int& total, const int offset, const int proportion)
+{
+    Sleep(100);
+    while (done < total)
+    {
+        printf("\r已完成%.1lf%%", ((double)done / (double)total) * proportion + offset);
+        Sleep(100);
+    }
+    printf("\r已完成%.1lf%%", ((double)done / (double)total) * proportion + offset);
 }
