@@ -78,25 +78,7 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/tmp/tmp.dnulYsBFg7/a.txt">
-			<Option target="LinuxC"/>
-		</Unit>
-		<Unit filename="/tmp/tmp.dnulYsBFg7/aa.txt">
-			<Option target="LinuxC"/>
-		</Unit>
-		<Unit filename="/tmp/tmp.dnulYsBFg7/atom.c">
-			<Option target="LinuxC"/>
-		</Unit>
-		<Unit filename="/tmp/tmp.dnulYsBFg7/fork.c">
-			<Option target="LinuxC"/>
-		</Unit>
-		<Unit filename="/tmp/tmp.dnulYsBFg7/main.c">
-			<Option target="LinuxC"/>
-		</Unit>
-		<Unit filename="/tmp/tmp.dnulYsBFg7/pthread.c">
-			<Option target="LinuxC"/>
-		</Unit>
-		<Unit filename="/tmp/tmp.dnulYsBFg7/threadsSort.c">
+		<Unit filename="/tmp/tmp.dnulYsBFg7/final.c">
 			<Option target="LinuxC"/>
 		</Unit>
 		<Unit filename="/tmp/tmp.dnulYsBFg7/CMakeLists.txt">

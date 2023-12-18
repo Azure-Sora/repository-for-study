@@ -1,18 +1,19 @@
 #include<iostream>
 #include "Graph.h"
+#include<stack>
 using namespace std;
 
-int Graph::getV()
+int Graph::getV()//访问顶点数
 {
 	return numVertex;
 }
 
-int Graph::getE()
+int Graph::getE()//访问边数
 {
 	return numEdge;
 }
 
-int Graph::findFirst(int v)
+int Graph::findFirst(int v)//找到第一个相邻点
 {
 	for (int i = 0; i < numVertex; i++) {
 		if (adjMatrix[v][i] != 0 && adjMatrix[v][i] != Graph::infty_distance)
@@ -21,7 +22,7 @@ int Graph::findFirst(int v)
 	return -1;
 }
 
-int Graph::findNext(int v1, int v2)
+int Graph::findNext(int v1, int v2)//找到下一个相邻点
 {
 	for (int i = v2 + 1; i < numVertex; i++) {
 		if (adjMatrix[v1][i] != 0 && adjMatrix[v1][i] != Graph::infty_distance)
@@ -30,23 +31,23 @@ int Graph::findNext(int v1, int v2)
 	return -1;
 }
 
-void Graph::setName(int order, string inputName)
+void Graph::setName(int order, string inputName)//设置结点名称
 {
 	mark[order - 1].name = inputName;
 }
 
-Node* Graph::getMark()
+Node* Graph::getMark()//访问表
 {
 	return mark;
 }
 
-void Graph::addEdge(int edgeStart, int edgeEnd, double wgt)
+void Graph::addEdge(int edgeStart, int edgeEnd, double wgt)//添加一条单向边
 {
 	if (wgt <= 0)
 	{
 		cout << "非法输入权值" << endl;
 	}
-	else if(adjMatrix[edgeStart - 1][edgeEnd - 1] != 0)
+	else if(adjMatrix[edgeStart - 1][edgeEnd - 1] != Graph::infty_distance)
 	{
 		cout << "要添加的边已存在，权值为" << adjMatrix[edgeStart - 1][edgeEnd - 1] << endl;
 	}
@@ -57,22 +58,20 @@ void Graph::addEdge(int edgeStart, int edgeEnd, double wgt)
 	}
 }
 
-void Graph::delEdge(int edgeStart, int edgeEnd)
+void Graph::delEdge(int edgeStart, int edgeEnd)//删除边
 {
-	adjMatrix[edgeStart - 1][edgeEnd - 1] = 0;
+	adjMatrix[edgeStart - 1][edgeEnd - 1] = Graph::infty_distance;
 	numEdge--;
 }
 
-int Graph::findV(string key)
+int Graph::findV(string key)//输入地点名称，查找图是否有这个字符串成员
 {
 	for(int i = 0;i< numVertex;i++)
-	{
 		if (mark[i].name == key) return i;
-	}
 	return -1;
 }
 
-double Graph::getDistance(double lo1, double la1, double lo2, double la2)
+double Graph::getDistance(double lo1, double la1, double lo2, double la2)//输入两点经纬度坐标，得到两点的距离
 {
 	double x1, y1, x2, y2, distance;
 	PrjPoint point1 = PrjPoint();
@@ -85,7 +84,7 @@ double Graph::getDistance(double lo1, double la1, double lo2, double la2)
 	return distance;
 }
 
-void Graph::standardInit()
+void Graph::standardInit()//将地图初始化
 {
 	if (numVertex < 30)
 		cout << "结点数不足" << endl;
@@ -227,12 +226,17 @@ void Graph::standardInit()
 
 }
 
+/*
+* 使用迪杰斯特拉算法计算出最短路径
+* 返回值：距离和路径
+*/
 pair<double, string> Graph::dijkstra(int location1, int location2)
 {
 	bool* isFinished = new bool[numVertex];
 	double* distance = new double[numVertex];
 	int* path = new int[numVertex];
-	int nowOperating = location1;
+	int nowOperating = location1;//正在从哪个顶点出发寻找路径
+
 	for (int i = 0; i < numVertex; i++)
 	{
 		isFinished[i] = false;
@@ -240,45 +244,57 @@ pair<double, string> Graph::dijkstra(int location1, int location2)
 		path[i] = -1;
 	}
 
-	isFinished[location1] = true;
+	isFinished[location1] = true;//自己到自己就是最短，且路径为0
 	distance[location1] = 0;
 
-	while (!isFinished[location2])
+	while (!isFinished[location2])//循环直到已经找到L1->L2的路径
 	{
-		int next = findFirst(nowOperating);
+		int next = findFirst(nowOperating);//寻找邻接的下一个顶点，直到找不到
 		while (next != -1)
 		{
-			if (!isFinished[next])
+			if (!isFinished[next])//如果邻接的顶点还没找到路径，则更新它的路径和距离
 			{
-				if(distance[next] == Graph::infty_distance || distance[nowOperating] + adjMatrix[nowOperating][next] < distance[next])
-				distance[next] = distance[nowOperating] + adjMatrix[nowOperating][next];
-				path[next] = nowOperating;
+				if (distance[next] == Graph::infty_distance || distance[nowOperating] + adjMatrix[nowOperating][next] < distance[next])//该邻接顶点还没有连接，或者经由nowOperating的路径更短，则更新
+				{
+					if (distance[next] == Graph::infty_distance) distance[next] = 0;
+					distance[next] = distance[nowOperating] + adjMatrix[nowOperating][next];
+					path[next] = nowOperating;
+				}
 			}
 			next = findNext(nowOperating, next);
 		}
-		int closest = 0;
+
+		int closest = 0;//认为未找到路径的顶点中路径最短的顶点已找到最短路径，完成一轮循环
 		while (isFinished[closest] || distance[closest] == Graph::infty_distance) closest++;
 		for (int j = 0; j < numVertex; j++)
 		{
-			if(!isFinished[j] && distance[j] != Graph::infty_distance && distance[j] < distance[closest])
+			if (!isFinished[j] && distance[j] != Graph::infty_distance && distance[j] < distance[closest])
 			{
 				closest = j;
 			}
 		}
+
 		isFinished[closest] = true;
 		nowOperating = closest;
 
-
 	}
 
-	string finalPath = "";
-	finalPath.append(getMark()[location2].name);
+	string finalPath = "";//借用一个栈把路径从倒的变成正的
+	stack<string> s;
+	s.push(getMark()[location2].name);
 	int pth = path[location2];
-	while(pth != -1)
+	while (pth != -1)
 	{
-		finalPath.append(" <= ");
-		finalPath.append(getMark()[pth].name);
+		s.push(getMark()[pth].name);
 		pth = path[pth];
+	}
+	finalPath.append(s.top());
+	s.pop();
+	while(!s.empty())
+	{
+		finalPath.append(" => ");
+		finalPath.append(s.top());
+		s.pop();
 	}
 
 	double finalDist = distance[location2];
@@ -288,5 +304,5 @@ pair<double, string> Graph::dijkstra(int location1, int location2)
 	delete[] path;
 
 	return pair<double, string>(finalDist, finalPath);
-	
+
 }

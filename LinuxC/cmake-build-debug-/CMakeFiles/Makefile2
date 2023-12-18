@@ -81,12 +81,12 @@ clean: CMakeFiles/LinuxC.dir/clean
 CMakeFiles/LinuxC.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/LinuxC.dir/build.make CMakeFiles/LinuxC.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/LinuxC.dir/build.make CMakeFiles/LinuxC.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/tmp/tmp.dnulYsBFg7/cmake-build-debug-/CMakeFiles --progress-num=1,2,3,4,5,6 "Built target LinuxC"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/tmp/tmp.dnulYsBFg7/cmake-build-debug-/CMakeFiles --progress-num=1,2 "Built target LinuxC"
 .PHONY : CMakeFiles/LinuxC.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/LinuxC.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /tmp/tmp.dnulYsBFg7/cmake-build-debug-/CMakeFiles 6
+	$(CMAKE_COMMAND) -E cmake_progress_start /tmp/tmp.dnulYsBFg7/cmake-build-debug-/CMakeFiles 2
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/LinuxC.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /tmp/tmp.dnulYsBFg7/cmake-build-debug-/CMakeFiles 0
 .PHONY : CMakeFiles/LinuxC.dir/rule

@@ -10,7 +10,7 @@ int runningPthreads;
 
 void *incr(void *arg);
 
-int main() {
+int main0() {
     pthread_mutex_init(&countMutex, NULL);
     pthread_mutex_init(&runningPthreadsMutex, NULL);
     pthread_t pthreads;
