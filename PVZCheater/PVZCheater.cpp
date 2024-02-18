@@ -7,19 +7,24 @@ PVZCheater::PVZCheater(QWidget *parent)
 {
     ui->setupUi(this);
 
-    gameProcess = getProcessID();
-    findSunshineAddress();
-    ui->label_nowSunshine->setText(QString::number(getSunshine()));
+    init();
 
     connect(ui->btn_setSunshine, &QPushButton::clicked, this, &PVZCheater::modifySunshine);
     connect(ui->action_refresh, &QAction::triggered, [&]() {
-        ui->label_nowSunshine->setText(QString::number(getSunshine()));
+        init();
         });
 }
 
 PVZCheater::~PVZCheater()
 {
     delete ui;
+}
+
+void PVZCheater::init()
+{
+    gameProcess = getProcessID();
+    findSunshineAddress();
+    ui->label_nowSunshine->setText(QString::number(getSunshine()));
 }
 
 HANDLE PVZCheater::getProcessID()
@@ -51,7 +56,6 @@ void PVZCheater::findSunshineAddress()
     ReadProcessMemory(gameProcess, (LPVOID)sunshineBaseAddress , &base, sizeof(DWORD), NULL);
     ReadProcessMemory(gameProcess, (LPVOID)(base + sunshineFirstOffset), &firstOffset, sizeof(DWORD), NULL);
     finalAddress = firstOffset + sunshineSecondOffset;
-    //ReadProcessMemory(gameProcess, (LPVOID)(firstOffset + sunshineSecondOffset), &finalAddress, sizeof(DWORD), NULL);
     sunshineAddress = finalAddress;
 }
 

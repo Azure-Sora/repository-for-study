@@ -20,6 +20,7 @@ public:
     HANDLE gameProcess;
     DWORD sunshineAddress;
 
+    void init();
     HANDLE getProcessID();
     int getSunshine();
     void modifySunshine();
