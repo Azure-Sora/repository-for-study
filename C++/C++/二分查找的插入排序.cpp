@@ -39,17 +39,34 @@ void insertionSort(E arr[], int n)
 	}
 }
 
+int test()
+{
+	int a;
+	a = 5;
+	a += 1;
+	TEST:
+	return 0xdeadbeef;
+	goto TEST;
+}
+
 int main()
 {
 
-	int arr[] = { 5,6,8,6,3,1,0,13,6,2 };
+	/*int arr[] = { 5,6,8,6,3,1,0,13,6,2 };
 
 	insertionSort(arr, 10);
 
 	for (int i = 0; i < 10; i++)
 	{
 		cout << arr[i] << endl;
-	}
+	}*/
+
+
+	// char cstr[5] = { '1','2','\0','4','\0' };
+	// string stdstr;
+	// stdstr.assign(cstr, 5);
+	// int a = stdstr.length();
+	// system("PAUSE");
 
 	return 0;
 }
