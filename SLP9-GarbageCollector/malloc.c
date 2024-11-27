@@ -166,6 +166,7 @@ void get_data_area(int* start, int* length)
 	IMAGE_SECTION_HEADER sectionHeader;
 	FILE* p;
 	p = fopen(_pgmptr, "r");
+	//printf("%s", _pgmptr);
 	fread(&dosHeader, sizeof(dosHeader), 1, p);
 	fseek(p, dosHeader.e_lfanew, SEEK_SET);
 	fread(&ntHeader, sizeof(ntHeader), 1, p);
@@ -227,6 +228,10 @@ extern void verify_garbage(void* addr);
 int globalAddr = 0;
 int globalLength = 0;
 
+// extern int reg_count;
+// extern int stack_cnt;
+// extern int global_cnt;
+
 void garbage_collect(int* regs, int pgm_stack)
 {
 	Tree* alloc_tree = NULL;
@@ -280,6 +285,7 @@ void garbage_collect(int* regs, int pgm_stack)
 		if (temp)
 		{
 			temp->size |= 0x01;
+			// reg_count++;
 		}
 	}
 
@@ -299,6 +305,7 @@ void garbage_collect(int* regs, int pgm_stack)
 		if (temp)
 		{
 			temp->size |= 0x01;
+			// stack_cnt++;
 		}
 	}
 
@@ -317,6 +324,7 @@ void garbage_collect(int* regs, int pgm_stack)
 		if (temp)
 		{
 			temp->size |= 0x01;
+			// global_cnt++;
 		}
 
 	}

@@ -318,6 +318,10 @@ void free_trace(trace_t* trace)
 
  /* Test correctness */
 
+// int reg_count = 0;
+// int stack_cnt = 0;
+// int global_cnt = 0;
+
 void correctness(trace_t* trace)
 {
 	long i;
@@ -407,6 +411,7 @@ void correctness(trace_t* trace)
 		printf("Final heap size: %ld\n", mem_usage());
 		printf("Overall utilization: %6.3f%%\n", 100.0 * stats->overall_utilization);
 	}
+	//printf("reg_cnt = %d, sta = %d, glob = %d\n", reg_count, stack_cnt, global_cnt);
 	printf("\n");
 
 }

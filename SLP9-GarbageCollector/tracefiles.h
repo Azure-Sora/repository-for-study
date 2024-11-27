@@ -11,7 +11,7 @@ extern char* default_tracefiles[] = {
 	"artificial/binary2.rep",
 	"kernels/cp-decl.rep",
 
-	//"short/short1.rep",
+	// "short/short1.rep",
 
 	//"artificial/coalescing.rep",
 	//"artificial/random.rep",
