@@ -30,7 +30,7 @@ typedef struct
 {
 	char type;
 	int code;
-	char flag;
+	char* err_info;
 }instruction;
 
 typedef struct
@@ -51,15 +51,9 @@ instruction* instructions;
 use* uses;
 module* modules;
 
-/*you can modify this function!*/
-
-/*
-  test_num: which file test, it must between 1 and 9
-  filename: the file that you should do with
-*/
 void link(int test_num, const char* filename)
 {
-	char outputfile[10];
+	char outputfile[20];
 	memset(outputfile, 0, 10);
 	sprintf(outputfile, "output-%d.txt", test_num);
 	in = fopen(filename, "r");    //open file for read,the file contains module that you should do with
@@ -95,7 +89,11 @@ int find_first_match_symbol_index(char* name)
 	int i = 0;
 	for (; i < symbols_count; i++)
 	{
-		if (strcmp(name, symbols[i].symbol_name) == 0) return i;
+		if (strcmp(name, symbols[i].symbol_name) == 0)
+		{
+			symbols[i].relative_position = -1;
+			return i;
+		}
 	}
 	return -1;
 }
@@ -246,7 +244,7 @@ void process_one()
 
 			instructions[instructions_count].type = ins_type;
 			instructions[instructions_count].code = atoi(ins);
-			instructions[instructions_count].flag = 0;
+			instructions[instructions_count].err_info = NULL;
 			instructions_count++;
 			i++;
 		}
@@ -269,7 +267,15 @@ void process_one()
 		{
 			base += modules[j].length;
 		}
-		symbols[i].absolute_position = base + symbols[i].relative_position;
+		if (symbols[i].relative_position > modules[symbols[i].module].length - 1)
+		{
+			symbols[i].absolute_position = base;
+			symbols[i].relative_position = -2;
+		}
+		else
+		{
+			symbols[i].absolute_position = base + symbols[i].relative_position;
+		}
 	}
 }
 
@@ -286,7 +292,14 @@ void process_two()
 	{
 		if (!is_symbol_output(symbols[i].symbol_name, symbol_output))
 		{
-			fprintf(out, "%s=%d", symbols[i].symbol_name, symbols[i].absolute_position);
+			if (symbols[i].relative_position == -2)
+			{
+				fprintf(out, "%s=%d Error: The value of %s is outside module %d; zero (relative) used", symbols[i].symbol_name, symbols[i].absolute_position, symbols[i].symbol_name, symbols[i].module + 1);
+			}
+			else
+			{
+				fprintf(out, "%s=%d", symbols[i].symbol_name, symbols[i].absolute_position);
+			}
 			if (is_symbol_to_be_repeated(symbols[i].symbol_name, i))
 			{
 				fputs(" Error: This variable is multiply defined; first value used.\n", out);
@@ -296,9 +309,15 @@ void process_two()
 				fputs("\n", out);
 			}
 		}
+		else
+		{
+			symbols[i].absolute_position = -1;
+		}
 		symbol_output[i] = symbols[i].symbol_name;
 	}
-	//
+
+	free(symbol_output);
+	//symbol table end
 
 	module_now = 0;
 	int ins_base = 0;
@@ -312,14 +331,38 @@ void process_two()
 			int ins_pos = ins_rela_pos + ins_base;
 			while (1)
 			{
+				switch (instructions[ins_pos].type)
+				{
+				case 'R':
+					instructions[ins_pos].err_info = "Error: R type address on use chain; treated as E type.";
+					break;
+				case 'A':
+					instructions[ins_pos].err_info = "Error: A type address on use chain; treated as E type.";
+					break;
+				case 'I':
+					instructions[ins_pos].err_info = "Error: I type address on use chain; treated as E type.";
+				}
+
 				int code = instructions[ins_pos].code;
 				int ins_next_rela_pos = code % 1000;
-				int ab_operand = symbols[find_first_match_symbol_index(uses[use_base + i].use_name)].absolute_position;
+				int symbol_index = find_first_match_symbol_index(uses[use_base + i].use_name);
+				int ab_operand;
+				if (symbol_index == -1)
+				{
+					ab_operand = 0;
+					instructions[ins_pos].err_info = malloc(50 * sizeof(char));
+					sprintf(instructions[ins_pos].err_info, "Error: %s is not defined; zero used.", uses[use_base + i].use_name);
+				}
+				else
+				{
+					ab_operand = symbols[symbol_index].absolute_position;
+				}
 				instructions[ins_pos].code = code / 1000 * 1000 + ab_operand;
+				instructions[ins_pos].type = 'e';
 				if (ins_next_rela_pos == 777) break;
 				if (ins_next_rela_pos >= modules[module_now].length)
 				{
-					instructions[ins_pos].flag = instructions[ins_pos].flag | 0x1;
+					instructions[ins_pos].err_info = "Error: Pointer in use chain exceeds module size; chain terminated.";
 					break;
 				}
 				ins_pos = ins_next_rela_pos + ins_base;
@@ -340,12 +383,33 @@ void process_two()
 		module_now++;
 	}
 
-	for (int i = 0; i < instructions_count; i++)
+	fputs("\nMemory Map\n", out);
+
+	for (i = 0; i < instructions_count; i++)
 	{
-		fprintf(out, "%d: %d\n", i, instructions[i].code);
+		if (instructions[i].type == 'E')
+		{
+			instructions[i].err_info = "Error: E type address not on use chain; treated as I type.";
+		}
+		if (instructions[i].err_info == NULL)
+		{
+			fprintf(out, "%d: %d\n", i, instructions[i].code);
+		}
+		else
+		{
+			fprintf(out, "%d: %d %s\n", i, instructions[i].code, instructions[i].err_info);
+		}
+
 	}
 
-	fclose(out);
+	fputs("\n", out);
+	for (i = 0; i < symbols_count; i++)
+	{
+		if (symbols[i].absolute_position != -1 && symbols[i].relative_position != -1)
+		{
+			fprintf(out, "Warning: %s was defined in module %d but never used.\n", symbols[i].symbol_name, symbols[i].module + 1);
+		}
+	}
 }
 
 
